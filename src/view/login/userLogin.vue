@@ -1,0 +1,86 @@
+<template>
+    <div>
+        <el-form :model="form" :rules="rules" class="login">
+            <h3 class="login_title">登录</h3>
+            <!-- prop需要与字段名相互对应 -->
+            <el-form-item label="用户名" prop="username"><el-input v-model="form.username"></el-input></el-form-item>
+            <el-form-item label="密码" prop="password"><el-input type="password"
+                    v-model="form.password"></el-input></el-form-item>
+            <el-form-item><el-button style="margin-left: 90px; margin-top: 10px;" @click="login_button()"
+                    class="login_button" type="peimary">登录</el-button></el-form-item>
+            <el-form-item> <el-link type="primary" :underline="false" @click="login_register()">立即注册</el-link> <el-link
+                    type="primary" :underline="false" class="link-right"
+                    @click="forget_password()">忘记密码</el-link></el-form-item>
+        </el-form>
+    </div>
+</template>
+
+<script>
+import cookies from "js-cookie"
+export default {
+    name: 'my-register',
+    data() {
+        return {
+            form: {
+                username: '',
+                password: '',
+            },
+            rules: {
+                username: [
+                    { required: true, trigger: 'blur', message: '请输入用户名' }
+                ],
+                password: [
+                    { required: true, trigger: 'blur', message: '请输入密码' }
+                ]
+            },
+        }
+    },
+    methods: {
+        login_button() {
+            const token = 'aaaa';
+            //将token信息存入cookie中，用于不同页面之间的通信
+            cookies.set('token', token);
+            this.$router.push('/main');
+            const formData = { // 将表单数据组织成适当的格式
+                username: this.$refs.username.value,
+                password: this.$refs.password.value
+                // 在此添加其他表单字段
+            };
+            this.$http.post('/api/user/login', formData).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        login_register() {
+            //将路由转移到对应的位置
+            this.$router.push('/registeLogin')
+        },
+        forget_password() {
+            //将路由转移到对应的位置
+            this.$router.push('/forgetPassword')
+        }
+    }
+}
+</script>
+
+<style lang="less" scoped>
+.login {
+    width: 250px;
+    border: 1px solid #eaeaea;
+    margin: 180px auto;
+    padding: 25px 35px 15px 35px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 25px #cac6c6;
+
+    .login_title {
+        font-weight: 300;
+        text-align: center;
+    }
+
+    .link-right {
+        float: right;
+    }
+}
+</style>
