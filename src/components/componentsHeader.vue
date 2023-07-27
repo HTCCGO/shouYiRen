@@ -8,11 +8,11 @@
                     <img class="el-icon-arrow-down el-icon--right">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人中心</el-dropdown-item>
-                    <el-dropdown-item>我的消息</el-dropdown-item>
-                    <el-dropdown-item>历史记录</el-dropdown-item>
-                    <el-dropdown-item>修改信息</el-dropdown-item>
-                    <el-dropdown-item>退出登录</el-dropdown-item>
+                    <el-dropdown-item @click="getUserInfo()">个人中心</el-dropdown-item>
+                    <el-dropdown-item @click="getUserMessage()">我的消息</el-dropdown-item>
+                    <el-dropdown-item @click="getUserhistory()">历史记录</el-dropdown-item>
+                    <el-dropdown-item @click="resetUserInfo()">修改信息</el-dropdown-item>
+                    <el-dropdown-item @click="quitUser()">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -23,8 +23,28 @@
 export default {
     data() {
         return {}
-    }
-}
+    }, 
+    methods: {
+        getUserInfo () {
+            this.$router.push('/userInfo');
+        },
+        getUserrMessage(){
+            this.$router.push('/userMessage');
+        },
+        getUserhistory(){
+            this.$router.push('/userHistory');
+        },
+        quitUser(){
+            this.$http.get('/quitUser').then(function(respon){
+
+            })
+        },
+        resetUserInfo(){
+            this.$router.push('/resetUserInfo');
+        }
+    },
+};
+ 
 </script>
 
 <style lang="less">

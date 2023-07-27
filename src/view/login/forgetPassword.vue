@@ -56,18 +56,26 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    const fromData={
+                        phoneNumber:this.ruleForm.phoneNumber.value,
+                        checkPhoneNumber: this.ruleForm.checkPhoneNumber.value,
+                    }
+                    this.$http.post('/api/forgetPassword',fromData).then(function(response){
+                        console.log(response.data);
+                    }).catch(function(error){
+                        console.log(error);
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
         },
-        getCode() {
-            console.log(this.ruleForm);
-            const phoneNumber = this.ruleForm.phoneNumber; 
 
-            if (!phoneNumber) {
+        getCode() {
+            const phoneNumber = this.ruleForm.phoneNumber;
+
+            if (phoneNumber !== '') {
                 const fromData = {
                     phoneNumber: phoneNumber,
                 };
@@ -77,7 +85,7 @@ export default {
                     //打印返回的数据
                     // 处理响应数据
                 })
-            }else{
+            } else {
                 console.log('submit Error');
             }
         },

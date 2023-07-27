@@ -14,6 +14,7 @@ import componentsHeaderVue from '../components/componentsHeader.vue'
 import componentsMainVue from '../components/main/componentsMain.vue'
 import componentsFooterVue from '../components/componentsFooter.vue'
 
+
 export default {
     data() {
         return {}

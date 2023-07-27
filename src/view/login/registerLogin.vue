@@ -16,7 +16,7 @@
       <el-form-item label="验证码:" prop="checkPhoneNumber" class="checkPhoneNumber">
         <el-input type="text" v-model="ruleForm.checkPhoneNumber"></el-input>
       </el-form-item>
-       <el-button class="cpn_button">发送验证码</el-button>
+      <el-button class="cpn_button" @click="getCode()">发送验证码</el-button>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')" class="ti_jiao">提交</el-button>
       </el-form-item>
@@ -98,13 +98,16 @@ export default {
       this.$refs[formName].validate((valid) => {//
         if (valid) {
           alert('submit!');
-          const fromData={
-            username: this.$refs.username.value,
-            password: this.$refs.pass.value,
-            phoneNumber: this.$refs.phoneNumber.value,
+          const fromData = {
+            username: this.ruleForm.username,
+           password: this.ruleForm.pass,
+            phoneNumber: this.ruleForm.phoneNumber,
+            checkPhoneNumber:this.ruleForm.checkPhoneNumber,
           }
-          this.$http.post('/',fromData).then(function (response) {
-            console.log(response);
+
+          console.log(fromData);
+          this.$http.post('/api/getCode', fromData).then(function (response) {
+            console.log(response.data);
           }).catch(function (error) {
             console.log(error);
           })
@@ -113,6 +116,25 @@ export default {
           return false;
         }
       });
+    },
+
+    getCode() {
+    
+      const phoneNumber = this.ruleForm.phoneNumber;
+
+      if (phoneNumber !== '') {
+        const fromData = {
+          phoneNumber: phoneNumber,
+        };
+        console.log(fromData);
+        this.$http.post('/api/getCode', fromData).then(response => {
+          console.log(response.data);
+          //打印返回的数据
+          // 处理响应数据
+        })
+      } else {
+        console.log('submit Error');
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -123,8 +145,8 @@ export default {
 
 <style lang="less" scoped>
 .registerLogin_main {
- 
-  margin: auto; 
+
+  margin: auto;
   margin-top: 100px;
   width: 450px;
   border: 1px solid #eaeaea;
@@ -138,15 +160,16 @@ export default {
   }
 
 }
-.ti_jiao{
+
+.ti_jiao {
   position: relative;
-  top:-20px;
+  top: -20px;
   left: 110px;
 }
 
-.cpn_button{
+.cpn_button {
   position: relative;
-  top:-61px;
+  top: -61px;
   left: 340px;
 }
 </style>
