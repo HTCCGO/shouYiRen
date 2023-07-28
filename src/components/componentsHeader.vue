@@ -35,9 +35,8 @@ export default {
             this.$router.push('/userHistory');
         },
         quitUser(){
-            this.$http.get('/quitUser').then(function(respon){
-
-            })
+            this.$http.get('/quitUser').then(
+            ).catch()
         },
         resetUserInfo(){
             this.$router.push('/resetUserInfo');
@@ -49,6 +48,7 @@ export default {
 
 <style lang="less">
 .header {
+    padding-top: 10px;
     border-bottom: 1px solid #eaeaea;
     background-color: #fff;
     height: 60px;

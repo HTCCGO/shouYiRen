@@ -24,17 +24,13 @@
             </el-col>
         </el-row>
         <div class="block">
-            <el-pagination
-            hide-on-single-page   当数据只有一页时,自动隐藏分页菜单
-        @size-change="handleSizeChange"        当每页显示的数据数目发生改变生的动作,需要按新的pageSize查询数据
-        @current-change="handleCurrentChange"  当改变当前页时产生的动作
-        :current-page="pageNo"                 绑定当前页
-        :page-sizes="[5, 10, 30, 50]"          显示pageSize的选项
-        :page-size="pageSize"				  绑定当前页数
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalCount">				  绑定当前的总数
-        >				
-            >
+            <el-pagination hide-on-single-page
+             @size-change="handleSizeChange" 
+             @current-change="handleCurrentChange"
+            :current-page="pageNo" :page-sizes="[5, 10, 30, 50]" 
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper" 
+            :total="totalCount">
             </el-pagination>
         </div>
 
@@ -66,26 +62,32 @@ export default {
             totalCount: 0//默认总数为0
         }
     },
-    mounted(){//这部分的函数是在页面的加载之前进行执行的函数
+    mounted() {//这部分的函数是在页面的加载之前进行执行的函数
         this.getCount();//获取当前数据的总数
         this.getList();//依照当前的页号和每页的数据量进行查询
     },
-    methods :{
-        getCount(){
-            this.$http.post('/getCount').then(res=>{
-                this.totalCount=res.data;
+    methods: {
+        getCount() {
+            this.$http.post('/getCount').then(res => {
+                this.totalCount = res.data;
             })
         },
-        getList(){
-            let fromData=new FormData();//一个web Api用于创建和处理包含表单数据的对象。它提供了一种方便的方式来捕获表单中的用户输入，并以键值对的形式进行处理
-            fromData.append("pageNo",this.pageNo);
-            fromData.append("pagesize",this.pagesize);
+        getList() {
+            let fromData = new FormData();//一个web Api用于创建和处理包含表单数据的对象。它提供了一种方便的方式来捕获表单中的用户输入，并以键值对的形式进行处理
+            fromData.append("pageNo", this.pageNo);
+            fromData.append("pagesize", this.pagesize);
             //将页面完成数据修改后的两个参数改变为键值对的形式，并存储在fromdata中
 
-            this.$http.post("/getUserList",fromData).then(res=>{
-                this.userList =res.data;
+            this.$http.post("/getUserList", fromData).then(res => {
+                this.userList = res.data;
             })
-        }   
+        },
+        handleCurrentChange() {
+
+        },
+        handleSizeChange() {
+
+        }
     },
 
 }

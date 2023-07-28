@@ -2,7 +2,7 @@
     <div>
         <el-container>
             <el-header><componentsHeaderVue/></el-header>
-            <el-main><componentsMainVue/></el-main>
+            <el-main><componentsUserInfoVue/></el-main>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>
@@ -11,8 +11,8 @@
 <script>
 
 import componentsHeaderVue from '../components/componentsHeader.vue'
-import componentsMainVue from '../components/main/componentsMain.vue'
 import componentsFooterVue from '../components/componentsFooter.vue'
+import componentsUserInfoVue from '@/components/userinfo/componentsUserInfo.vue';
 
 export default {
     data() {
@@ -20,7 +20,7 @@ export default {
     },
     components:  {
     componentsHeaderVue,
-    componentsMainVue,
+    componentsUserInfoVue,
     componentsFooterVue
 }
 };
