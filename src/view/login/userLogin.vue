@@ -8,9 +8,11 @@
                     v-model="form.password"></el-input></el-form-item>
             <el-form-item><el-button style="margin-left: 90px; margin-top: 10px;" @click="login_button()"
                     class="login_button" type="peimary">登录</el-button></el-form-item>
-            <el-form-item> <el-link type="primary" :underline="false" @click="login_register()">立即注册</el-link> <el-link
-                    type="primary" :underline="false" class="link-right"
-                    @click="forget_password()">忘记密码</el-link></el-form-item>
+            <el-form-item>
+                <el-link type="primary" :underline="false" @click="login_register()">立即注册</el-link>
+                <el-link type="primary" :underline="false" class="link-right"
+                    @click="forget_password()">忘记密码</el-link>
+            </el-form-item>
         </el-form>
     </div>
 </template>

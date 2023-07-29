@@ -7,10 +7,10 @@ import personalCenter from '../view/userInfoMain.vue'
 import registerLogin from '../view/login/registerLogin.vue'
 import forgetPassword from '../view/login/forgetPassword.vue'
 
-import resetUserInfo from '../view/resetUserInfo.vue'
-import userHistory from '../view/userHistory.vue'
-import userInfo from '../view/userInfo.vue'
-import userMessage from '../view/userMessage.vue'
+import resetUserInfo from '../view/user/resetUserInfo.vue'
+import userHistory from '../view/user/userHistory.vue'
+import userInfo from '../view/user/userInfo.vue'
+import userMessage from '../view/user/userMessage.vue'
 
 Vue.use(vueRouter);
 

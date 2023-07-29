@@ -5,7 +5,7 @@
         <div class="header_right">
             <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
-                    <img class="el-icon-arrow-down el-icon--right">
+                    <img class="el-icon-arrow-down el-icon--right" style=" background-color: black;">
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click="getUserInfo()">个人中心</el-dropdown-item>
@@ -35,7 +35,10 @@ export default {
             this.$router.push('/userHistory');
         },
         quitUser(){
-            this.$http.get('/quitUser').then(
+            const fromData={
+                quit:1,
+            }
+            this.$http.get('/api/quitUser',fromData).then(
             ).catch()
         },
         resetUserInfo(){
@@ -81,7 +84,6 @@ export default {
 .el-icon-arrow-down {
     height: 30px;
     width: 30px;
-    background-color: black;
     border-radius: 50%;
 }
 </style>
