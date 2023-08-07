@@ -2,7 +2,7 @@
     <div>
         <el-container>
             <el-header><componentsHeaderVue/></el-header>
-            <el-main><componentsMainVue/></el-main>
+            <el-main><componentsUserMessage/></el-main>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>
@@ -11,7 +11,7 @@
 <script>
 
 import componentsHeaderVue from '../../components/componentsHeader.vue'
-import componentsMainVue from '../../components/main/componentsMain.vue'
+import componentsUserMessage from '../../components/userinfo/componentsUserMessage.vue'
 import componentsFooterVue from '../../components/componentsFooter.vue'
 
 
@@ -21,7 +21,7 @@ export default {
     },
     components:  {
     componentsHeaderVue,
-    componentsMainVue,
+    componentsUserMessage,
     componentsFooterVue
 }
 };
@@ -32,6 +32,9 @@ export default {
 <style lang="less" scoped>
 .el-header{
     padding: 0;
+}
+.el-main{
+    padding: 0px;
 }
 .el-footer{
     padding: 0;
