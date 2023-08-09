@@ -35,6 +35,7 @@ export default {
 }
 .el-main{
     padding: 0px;
+    overflow:hidden;
 }
 .el-footer{
     padding: 0;
