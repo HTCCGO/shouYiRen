@@ -18,5 +18,6 @@
     width: auto;
     height: 12vh;
     background-color: #383839;
+    flex: 0 0 auto;
 }
 </style>

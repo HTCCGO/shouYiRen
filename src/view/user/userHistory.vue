@@ -1,26 +1,26 @@
 <template>
     <div>
-        <el-container>
+        <el-container style="min-height: 100vh;">
             <el-header><componentsHeaderVue/></el-header>
-            <el-main><componentsMainVue/></el-main>
+            <el-main><componentsUserHistoryVue/></el-main>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>
 </template>
 
 <script>
-
 import componentsHeaderVue from '../../components/componentsHeader.vue'
-import componentsMainVue from '../../components/main/componentsMain.vue'
+import componentsUserHistoryVue from '../../components/userinfo/componentsUserHistory.vue'
 import componentsFooterVue from '../../components/componentsFooter.vue'
 
 export default {
     data() {
         return {}
     },
+
     components:  {
     componentsHeaderVue,
-    componentsMainVue,
+    componentsUserHistoryVue,
     componentsFooterVue
 }
 };

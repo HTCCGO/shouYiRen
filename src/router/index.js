@@ -34,3 +34,4 @@ const router = new vueRouter({
 })
 
 export default router;
+

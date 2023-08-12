@@ -2,7 +2,7 @@
     <div>
         <el-container>
             <el-header><componentsHeaderVue/></el-header>  
-            <el-main><componentsUserInfoVue/></el-main>
+            <el-main><componentsResetUserVue/></el-main>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>
@@ -12,7 +12,7 @@
 
 import componentsHeaderVue from '../../components/componentsHeader.vue'
 import componentsFooterVue from '../../components/componentsFooter.vue'
-import componentsUserInfoVue from '@/components/userinfo/componentsUserInfo.vue'
+import componentsResetUserVue from '../../components/userinfo/componentsResetUser.vue'
 
 export default {
     data() {
@@ -20,7 +20,7 @@ export default {
     },
     components:  {
     componentsHeaderVue,
-    componentsUserInfoVue,
+    componentsResetUserVue,
     componentsFooterVue,
 }
 };

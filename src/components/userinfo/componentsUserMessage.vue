@@ -107,7 +107,6 @@ export default{
 
 .block_right {
     margin-left: 5px;
-
     div {
         div {
             width: 0;
