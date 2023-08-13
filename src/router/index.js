@@ -26,6 +26,7 @@ const routes = [
     { path: '/userMessage', component: userMessage },
     { path: '/userHistory', component: userHistory },
     { path: '/resetUserInfo', component: resetUserInfo },
+    
 ]
 
 const router = new vueRouter({

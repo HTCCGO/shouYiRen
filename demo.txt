@@ -1,0 +1,144 @@
+1.seach();
+请求类型：post；
+请求地址：localhost：3000/main
+输入:{
+    seach_txt:“ ”;
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data;{
+    username_id:number;
+    username；“”；//商品所对应的卖出方的用户名；
+    user_pig; url ;//卖出方的头像信息；
+    shangping；｛  //所售商品的一些基本信息。
+    sahngping_id:number/
+    shangping_pig:url;shangping的图片；
+    shangping_text; String;shangping的简单描述；
+    ｝
+  }
+}
+
+需求：通过传入的seach_txt属性，在shangping/users数据库中进行精确查询的方式来查出对应的商品信息或者是用户信息，并且将其转化为一个数组上传；
+
+消息（message）:
+是：null；
+否：没有该用户/该商品。
+
+
+
+
+2.header();
+请求类型：post；
+请求地址：localhost：3000/main
+输入:{
+
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data;{
+        header_img:url; //主页面跑马灯的图片地址；
+  }
+}
+
+需求：上传在header文件夹下的跑马灯图案，以url的形式上传，分为五个数组上传；
+
+消息（message）:
+是：null；
+否：未找到对应的图片。
+
+
+
+3.main_card();
+请求类型：post；
+请求地址：localhost：3000/main
+输入:{
+    page:number;//当前页码；
+    size:number;//当前页码所展示的条数
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data:{
+    id:number;//一个自增的id值，目的是为了找到对应的卡片
+    shangping_id:“”;//商品的ID值。
+    title:“”；//商品的名称。
+    content:“”；
+    src:“”；//商品的图片地址
+    text:“”；//
+  }
+  }
+
+需求：通过传入的page和size属性，计算出所需要的商品的信息数量，将其划分为数组后回传给前端程序。
+
+消息（message）:
+是：null；
+否：数据错误。
+
+
+
+
+4.userMessage();
+请求类型：post；
+请求地址：localhost：3000/userinfo
+输入:{
+    token:"";//通过token字符串来将其
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data;{
+    username:"";
+    phoneNumber:"",
+    juzhudi:"";//居住地
+    beizhu:"";//备注
+    lianxidizhi:"";//联系地址
+    ｝
+  }
+}
+
+需求：将token转化为一个可以被识别的信息，并进行查询，将信息传送给前端框架。
+
+消息（message）:
+是：null；
+否：没有该用户/该商品。
+
+
+
+1.seach();
+请求类型：post；
+请求地址：localhost：3000/main
+输入:{
+    seach_txt:“ ”;
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data;{
+    username_id:number;
+    username；“”；//商品所对应的卖出方的用户名；
+    user_pig; url ;//卖出方的头像信息；
+    shangping；｛  //所售商品的一些基本信息。
+    sahngping_id:number/
+    shangping_pig:url;shangping的图片；
+    shangping_text; String;shangping的简单描述；
+    ｝
+  }
+}
+
+需求：通过传入的seach_txt属性，在shangping/users数据库中进行精确查询的方式来查出对应的商品信息或者是用户信息，并且将其转化为一个数组上传；
+
+消息（message）:
+是：null；
+否：没有该用户/该商品。

@@ -11,7 +11,7 @@
 <script>
 
 import componentsHeaderVue from '../../components/componentsHeader.vue'
-import componentsMainVue from '../../components/main/componentsMain.vue'
+import componentsMainVue from '@/components/userinfo/componentsUserInfo.vue'
 import componentsFooterVue from '../../components/componentsFooter.vue'
 
 export default {
