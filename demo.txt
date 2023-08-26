@@ -114,11 +114,11 @@
 
 
 
-1.seach();
+5.userInfo_user();
 请求类型：post；
-请求地址：localhost：3000/main
+请求地址：localhost：3000/userInfo
 输入:{
-    seach_txt:“ ”;
+    token:"",
 }；
 
 输出:{
@@ -126,19 +126,53 @@
   status: ;
   message: ;
   data;{
-    username_id:number;
-    username；“”；//商品所对应的卖出方的用户名；
-    user_pig; url ;//卖出方的头像信息；
-    shangping；｛  //所售商品的一些基本信息。
-    sahngping_id:number/
-    shangping_pig:url;shangping的图片；
-    shangping_text; String;shangping的简单描述；
+        id: '12987126',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333'
     ｝
   }
 }
 
-需求：通过传入的seach_txt属性，在shangping/users数据库中进行精确查询的方式来查出对应的商品信息或者是用户信息，并且将其转化为一个数组上传；
+需求：通过用户名，来将其相应的信息上传到前端界面。
 
 消息（message）:
 是：null；
-否：没有该用户/该商品。
+否：没有该用户。
+
+
+
+
+5.userInfoHistory;
+请求类型：post；
+请求地址：localhost：3000/userInfo
+输入:{
+  page:number;
+  size:number;
+    token:" ",
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data;{
+        id: '12987126',
+        username: '好滋好味鸡蛋仔',
+        address:" ",
+        dingdan:"",
+        category: '江浙小吃、小吃零食',
+        start_time:"",
+        end_time:"",,
+    ｝
+  }
+}
+
+需求：通过用户名，来将其相应的信息上传到前端界面。
+
+消息（message）:
+是：null；
+否：没有该用户。

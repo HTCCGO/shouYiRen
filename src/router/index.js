@@ -11,7 +11,10 @@ import resetUserInfo from '../view/user/resetUserInfo.vue'
 import userHistory from '../view/user/userHistory.vue'
 import userInfo from '../view/user/userInfo.vue'
 import userMessage from '../view/user/userMessage.vue'
+import userItem from '../view/userItem.vue'
 
+//demo
+import demo from '@/components/item/componentsItem.vue'
 Vue.use(vueRouter);
 
 const routes = [
@@ -26,7 +29,9 @@ const routes = [
     { path: '/userMessage', component: userMessage },
     { path: '/userHistory', component: userHistory },
     { path: '/resetUserInfo', component: resetUserInfo },
+    { path: '/userItem', component: userItem },
     
+    { path: '/demo', component: demo }
 ]
 
 const router = new vueRouter({
