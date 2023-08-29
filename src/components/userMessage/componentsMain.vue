@@ -1,29 +1,27 @@
 <template>
     <div class="index">
-         <!-- eslint-disable-next-line -->
-        <div class="main" v-for="item in items" :key="items.id">
-            <div style="display: flex;">
-                <div class="aLittleLeft"></div>
+
+        <div class="main" style="position: relative;" ref="scrollContainer"> <!-- eslint-disable-next-line -->
+            <div style="display: flex;" v-for="(item, index) in message" :key="item.index"
+                :class="{ 'user_1': item.sender === 1, 'user_2': item.sender === 2 }">
+                <!-- 通过判断sender的值来讲其划分为左右两侧的 -->
                 <div class="div">
                     <el-avatar size="small" :src="circleUrl"></el-avatar>
                 </div>
-                <div class="left_msg"><span>{{ item.left_msg }}</span></div>
+                <div class="msg"><span>{{ item.msg }}</span></div>
             </div>
-            <div style="display: flex; float: right; margin-right: 4px;">
-                <div class="aLittleRight"></div>
-                <div class="right_msg"><span>{{ item.right_msg }}</span></div>
-                <div class="div"><el-avatar size="small" :src="circleUrl"></el-avatar></div>
-            </div>
+
         </div>
         <div class="text">
             <div class="icons">
-                <el-button type="text" @click="getDianZan"> <span class="iconfont icon-dianzan"></span></el-button>
+                <div @click="demo()" style="height: 20px; width: 20px; background-color: black;"></div>
+                <el-button type="text" @click="getDianZan "> <span class="iconfont icon-dianzan"></span></el-button>
                 <el-button type="text" @click="tupian = true"> <span class="iconfont icon-tupian"></span></el-button>
                 <el-button type="text" @click="zhifu = true"> <span class="iconfont icon-zhifu"></span></el-button>
                 <el-button type="text" @click="updata = true"> <span
                         class="iconfont icon-shangchuandaochu"></span></el-button>
             </div>
-            <textarea v-model="main_message.message"></textarea>
+            <textarea v-model="newMessage"></textarea>
             <div>
                 <el-button size="small" @click="getMessage()">发送</el-button>
                 <el-button type="danger" size="small">取消</el-button>
@@ -31,13 +29,14 @@
         </div>
 
         <el-dialog title="" :visible.sync="updata" direction="rtl" size="30%">
-            <el-upload class="upload-demo" style="margin-left: 170px; margin-bottom: 40px;" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
+            <el-upload class="upload-demo" style="margin-left: 170px; margin-bottom: 40px;" drag
+                action="https://jsonplaceholder.typicode.com/posts/" multiple>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-           
+
             </el-upload>
-            <el-button type="primary"  @click="updata = false" style="margin-left: 140px;">确 认</el-button>
-            <el-button @click="updata= false" style="margin-left: 270px;">取 消</el-button>
+            <el-button type="primary" @click="updata = false" style="margin-left: 140px;">确 认</el-button>
+            <el-button @click="updata = false" style="margin-left: 270px;">取 消</el-button>
         </el-dialog>
 
     </div>
@@ -51,32 +50,76 @@ export default {
         return {
             updata: false,
             direction: 'rtl',
-            main_message: {
-                message: ""
-            },
-            items: [
-                {
-                    id: 1,
-                    left_msg: "aaaa",
-                    right_msg: "ssss",
-                }
-
-            ]
+            newMessage: "qwer",
+            userId:"",
+            message: [{
+                sender: 1,
+                msg: "aaa",
+            }, {
+                sender: 2,
+                msg: 'aaa',
+            }, {
+                sender: 1,
+                msg: 'AAA',
+            }, {
+                sender: 2,
+                msg: 'aaa',
+            }, {
+                sender: 1,
+                msg: "aaa",
+            }, {
+                sender: 2,
+                msg: 'aaa',
+            }
+            ],
         }
     },
-    methods:{
-        handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            _
-            done();
-          })
-          .catch(_ => {
-            _
-          });
-      }
+    mounted() {
+    // 使用this.$store.state.XXX可以直接访问到仓库中的状态
+  },
+  watch(){
+    "this.$store.state.userId";{
+        this.userId=this.$store.state.userId;
+        console.log( this.userId);
     }
-  };
+  },
+    methods: {
+        socketOpen() {
+            this.$socket.open()// 开始连接 socket
+        },
+        socketSendmsg() { // 发送消息
+            this.$socket.emit('hello', '这里是客户端')
+        },
+        lockResult() {
+            console.log('链接状态', this.$socket.connected)
+            console.log('this.$socket', this.$socket)
+            console.log('this.sockets', this.sockets)
+        },
+        closeSocket() {
+            this.$socket.close()
+        },
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {
+                    _
+                    done();
+                })
+                .catch(_ => {
+                    _
+                });
+        },
+        getDianZan() {
+
+        },
+        socket: {
+
+        },
+        demo(){
+                    // console.log(this.items.username);
+                    console.log(this.$store.state.userMessageId);
+                }
+    }
+};
 </script>
 
 <style lang="less" scoped>
@@ -92,8 +135,10 @@ export default {
     border-bottom: none;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    width: 800px;
+    max-width: 800px;
     height: 480px;
+    overflow: auto;
+    overflow-x: hidden;
 }
 
 .text {
@@ -126,8 +171,12 @@ export default {
 }
 
 /* Add the closing curly brace here */
+.user_1 {
+    margin-left: 9px;
+    margin-bottom: 7px;
+}
 
-.left_msg {
+.user_1 .msg {
     border: 1px solid black;
     height: 20px;
     width: auto;
@@ -137,7 +186,13 @@ export default {
     border-radius: 8px;
 }
 
-.right_msg {
+.user_2 {
+    margin-bottom: 7px;
+    position: relative;
+    left: 90%;
+}
+
+.user_2 .msg {
     border: 1px solid black;
     margin-top: 3px;
     margin-right: 11px;
@@ -145,13 +200,20 @@ export default {
     width: auto;
     padding: 5px;
     border-radius: 8px;
+    position: relative;
+    left: -33px;
+}
+
+.user_2 .el-avatar {
+    position: relative;
+    left: 40px;
 }
 
 .div {
     margin-top: 5px;
 }
 
-.aLittleLeft {
+.aLittle {
     border: 1px solid;
     height: 10px;
     width: 10px;

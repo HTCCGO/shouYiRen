@@ -14,7 +14,7 @@ import userMessage from '../view/user/userMessage.vue'
 import userItem from '../view/userItem.vue'
 
 //demo
-import demo from '@/components/item/componentsItem.vue'
+import demo from '@/view/demo.vue'
 Vue.use(vueRouter);
 
 const routes = [
