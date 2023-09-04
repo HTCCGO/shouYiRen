@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="leftsconcat">
-            <div class="concat" v-for="item in items" :key="item.index"  @click="getUserName(item.userId)">
+            <div class="concat" v-for="item in items" :key="item.index"  >
                 <p>{{ item.message }}</p><br>
                 <span>来自于:</span>
-                <span class="username">{{ item.username }}</span>
+                <span class="username" @click="getUserName(item.userId)">{{ item.username }}</span>
             </div>
         </div>
     </div>
@@ -33,14 +33,13 @@ export default {
     },
     mounted(){
         this.$store.commit('setConcatItems',this.items)
-        console.log(this.$store.state.userMessageConcatItem);
     },
     methods: {
                 emitEvent() {
                     this.$emit("passtofather", this.sonMsg);
                 },
-                getUserName(index){
-                    this.$store.commit('setuserId',index);
+                getUserName(userId){
+                    this.$store.commit('setuserId',userId);
                 },
             },
 }

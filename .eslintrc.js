@@ -15,6 +15,9 @@ module.exports = {
       'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'vue/multi-word-component-names': "off",
     //   'no-undef': 'off', // 禁用未声明的变量规则
+    },
+    "globals":{
+      "Aliplayer": false,
     }
   }
   

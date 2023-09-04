@@ -16,12 +16,11 @@
             </el-col>
         </el-row>
         <div class="block">
-            <el-pagination hide-on-single-page
-             @size-change="handleSizeChange" 
-             @current-change="handleCurrentChange"
+            <el-pagination
+             hide-on-single-page
             :current-page="pageNo" :page-sizes="[5, 10, 30, 50]" 
             :page-size="pagesize"
-            layout="total, sizes, prev, pager, next, jumper" 
+            layout="prev, pager, next" 
             :total="totalCount">
             </el-pagination>
         </div>
@@ -43,21 +42,30 @@ export default {
                 { id: 6, title: 'Card 2', content: 'Content 2', src: '', text: ' 11' },
                 { id: 7, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
                 { id: 8, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
-                { id: 9, title: 'Card 1', content: 'Content 1', src: '', text: ' 11' },
-                { id: 10, title: 'Card 2', content: 'Content 2', src: '', text: ' 11' },
-                { id: 11, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
-                { id: 12, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
                 // 添加更多的卡片数据...
             ],
             userList: [],
             pageNo: 1,//默认当前页面为第一页
             pagesize: 4,//默认当前每页的数据为4条
-            totalCount: 0//默认总数为0
+            totalCount: 100//默认总数为0
         }
     },
     mounted() {//这部分的函数是在页面的加载之前进行执行的函数
         this.getCount();//获取当前数据的总数
         this.getList();//依照当前的页号和每页的数据量进行查询
+    },
+
+    watch:{
+        pageNo:{
+            handler(){
+                let fromData={
+                    pageNo:this.pageNo,
+                }
+                this.$http.post('/api/seach/page',fromData).then(function(response){
+                    this.cardData=response.data;
+                })
+            }
+        }
     },
     methods: {
         getCount() {
@@ -71,16 +79,10 @@ export default {
             fromData.append("pagesize", this.pagesize);
             //将页面完成数据修改后的两个参数改变为键值对的形式，并存储在fromdata中
 
-            this.$http.post("/getUserList", fromData).then(res => {
+            this.$http.post("/seach/page", fromData).then(res => {
                 this.userList = res.data;
             })
         },
-        handleCurrentChange() {
-
-        },
-        handleSizeChange() {
-
-        }
     },
 
 }

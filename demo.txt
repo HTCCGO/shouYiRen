@@ -178,3 +178,29 @@
 否：没有该用户。
 
 1.watch无法正常的完成数据监听，怀疑是所使用的方式出现错误。
+
+
+
+6.user/login;
+请求类型：post；
+请求地址：localhost：3000/Login
+输入:{
+                username: "",
+                password: "",
+}；
+
+输出:{
+  code:  ;
+  status: ;
+  message: ;
+  data;{
+       token:"",
+    ｝
+  }
+}
+
+需求：通过用户名，来将其相应的信息上传到前端界面。
+
+消息（message）:
+是：null；
+否：没有该用户。

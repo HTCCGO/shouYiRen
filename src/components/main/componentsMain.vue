@@ -24,7 +24,8 @@
             </el-col>
         </el-row>
         <div class="block">
-            <el-pagination hide-on-single-page
+            <el-pagination 
+            hide-on-single-page
              @size-change="handleSizeChange" 
              @current-change="handleCurrentChange"
             :current-page="pageNo" :page-sizes="[5, 10, 30, 50]" 
@@ -62,10 +63,29 @@ export default {
             totalCount: 0//默认总数为0
         }
     },
+    //通过路由缓存的方式来进行上一页面的更改
     mounted() {//这部分的函数是在页面的加载之前进行执行的函数
         this.getCount();//获取当前数据的总数
         this.getList();//依照当前的页号和每页的数据量进行查询
+        this.getHeader();//返回header的数据
     },
+    watch:{
+        pageNo:{
+            handler(){
+                let fromData={
+                    pageNo:this.pageNo,
+                    pageSize:this.pageSize,
+                }
+                this.$http.post('/api/seach/page',fromData).then(function(response){
+                    this.cardData=response.data;
+                })
+            }
+        }
+    },
+    destroyed: function () {
+    console.log("我已经离开了！");
+        this.stopTimer();
+},
     methods: {
         getCount() {
             this.$http.post('/getCount').then(res => {
@@ -82,12 +102,11 @@ export default {
                 this.userList = res.data;
             })
         },
-        handleCurrentChange() {
-
+        getHeader(){
+            this.$http.post('/api/seach/getHeader').then(response=>{
+                this.cardHeader=response.data;
+            })
         },
-        handleSizeChange() {
-
-        }
     },
 
 }

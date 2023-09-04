@@ -9,28 +9,37 @@ const debug = process.env.NODE_ENV !== 'production';
 const store = new Vuex.Store({
     strict: debug,//在不是生产环境下都开启严格模式
     state: {
+
         userMessageConcatItem: [{
             userId:"",
             username: "AAA",
             message: "",
         }],
-        userId:"",
+
+        userId:"123",
         userMessageId:"112233",
 
         userMessageMain: [{
             sender: 1,//用户左右
             msg: "aaa",//用户发送的消息
         }],
-        token: "",//用户的token值
-        card:[{
-            id: 1,
-            title: 'Card 1',
-            content: 'Content 1',
-            src: '',
-            text: ' 11'
-        }],
+
+        seach_txt:"",
+        seach_card:[],
         userdescription: "",//用户描述
         itemdescription: "",//商品描述
+
+        page:{
+                 pageNo: 1,//默认当前页面为第一页
+                 pagesize: 8,//默认当前每页的数据为4条
+                 totalCount: 0//默认总数为0
+        },
+        sizePage:{
+            pageNo: 1,//默认当前页面为第一页
+            pagesize: 8,//默认当前每页的数据为4条
+            totalCount: 0//默认总数为0
+   }
+   
     },
     getters: {
     },
@@ -41,18 +50,30 @@ const store = new Vuex.Store({
                         state.userMessageConcat.username=username;
             }
         },
-        setuserId(state,index){
-            
-                state.userId=index;
+        setuserId(state,userId){
+                state.userId=userId;
         },
         setConcatItems(state,items){
-            // let i=0;
             state.userMessageConcatItem=items;
-            // for(i;i<=items.length;i++){
-            //     state.userMessageConcatItem[i].userId=items[i]. userId;
-            //     state.userMessageConcatItem[i].username=items[i]. username;
-            //     state.userMessageConcatItem[i].message=items[i]. message;
-            // }
+        },
+        getSeachCard(state,seachCard){
+            state.seach_card=seachCard;
+        },
+        getHomePage(state,page){
+            state.page.pageNo=page.pageNo;
+            state.page.pagesize=page.pagesize;
+            state.page.totalCount=page.totalCount;
+        },
+        getSeachPage(state,page){
+            state.seachPage.pageNo=page.pageNo;
+            state.seachPage.pagesize=page.pagesize;
+            state.seachPage.totalCount=page.totalCount;
+        },
+        getHomePageNo(state,page){
+            state.page.pageNo=page.pageNo;
+        },
+        getSeachPageNo(state,page){
+            state.seachPage.pageNo=page.pageNo;
         }
     },
     actions: {

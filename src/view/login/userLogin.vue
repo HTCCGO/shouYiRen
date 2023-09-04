@@ -24,8 +24,8 @@ export default {
     data() {
         return {
             form: {
-                username: '',
-                password: '',
+                username: "",
+                password: "",
             },
             rules: {
                 username: [
@@ -42,14 +42,15 @@ export default {
             const token = 'aaaa';
             //将token信息存入cookie中，用于不同页面之间的通信
             cookies.set('token', token);
-            this.$router.push('/main');
+            this.$router.push('/home');
             const formData = { // 将表单数据组织成适当的格式
-                username: this.$refs.username.value,
-                password: this.$refs.password.value
+                username: this.username,
+                password: this.password,
                 // 在此添加其他表单字段
             };
             this.$http.post('/api/user/login', formData).then(function (response) {
-                console.log(response);
+               //将token的值赋值给cookies
+                cookies.set("token",response.data.token);
             }).catch(function (error) {
                 console.log(error);
             })

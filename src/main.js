@@ -6,14 +6,33 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 // import VueSocketIO from 'vue-socket.io'
 import store from './store/index.js'
+import Cookie from 'js-cookie'
+
 Vue.config.productionTip = false
 Vue.use(elementUi);
 Vue.prototype.$http = axios;
+//全局注册cookie
+Vue.prototype.$cookie=Cookie;
 // Vue.use(new VueSocketIO({
 //   debug: true,
 //   connection: 'http://localhost:3000', // socket 服务器所在地址
 // }));
 
+//生成一个cookie
+if(document.cookie){
+  console.log(document.cookie);
+}else{
+  Cookie.set("token","1122", { expires: 1440 })
+}
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = (Cookie.get('token') !==  undefined); // 使用实际的登录状态判断
+  if (to.path !== '/login' && !isLoggedIn) {
+      next('/login');
+  } else {
+      next();
+  }
+});
 new Vue({
   router,
   store,

@@ -1,18 +1,18 @@
 <template>
     <div class="header">
-        <div class="header_left"><el-button size="medium " round>首页</el-button></div>
-        <div class="header_medium"><el-input placeholder="请输入内容" prefix-icon="el-icon-search" /> </div>
+        <div class="header_left"><el-button size="medium " round @click="getHome()">首页</el-button></div>
+        <div class="header_medium"><el-input @keyup.enter.native="toSearch()" placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seach_txt"/> </div>
         <div class="header_right">
             <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                     <img class="el-icon-arrow-down el-icon--right" style=" background-color: black;">
                 </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click="getUserInfo()">个人中心</el-dropdown-item>
-                    <el-dropdown-item @click="getUserMessage()">我的消息</el-dropdown-item>
-                    <el-dropdown-item @click="getUserhistory()">历史记录</el-dropdown-item>
-                    <el-dropdown-item @click="resetUserInfo()">修改信息</el-dropdown-item>
-                    <el-dropdown-item @click="quitUser()">退出登录</el-dropdown-item>
+                <el-dropdown-menu slot="dropdown" >
+                    <el-dropdown-item  @click.native="getUserInfo()">个人中心</el-dropdown-item>
+                    <el-dropdown-item @click.native="getUserMessage()">我的消息</el-dropdown-item>
+                    <el-dropdown-item @click.native="getUserHistory()">历史记录</el-dropdown-item>
+                    <el-dropdown-item @click.native="resetUserInfo()">修改信息</el-dropdown-item>
+                    <el-dropdown-item @click.native="quitUser()">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -20,29 +20,42 @@
 </template>
 
 <script>
+
 export default {
     data() {
-        return {}
+        return {
+            seach_txt:""
+        }
     }, 
     methods: {
-        getUserInfo () {
-            this.$router.push('/userInfo');
+        getUserInfo() {
+            this.$router.push('userInfo')
         },
-        getUserrMessage(){
+        getUserMessage(){
             this.$router.push('/userMessage');
         },
-        getUserhistory(){
+        getUserHistory(){
             this.$router.push('/userHistory');
         },
         quitUser(){
-            const fromData={
-                quit:1,
-            }
-            this.$http.get('/api/quitUser',fromData).then(
-            ).catch()
+            this.$cookie.remove("token");
+            this.$router.push('/login')
         },
         resetUserInfo(){
             this.$router.push('/resetUserInfo');
+        },
+        getHome(){
+            this.$router.push('/home');
+        },
+        toSearch(){
+            let fromData={
+                seach_txt:this.seach_txt,
+            };
+            //上传搜索信息
+            this.$http.post('/api/seach',fromData).then(response=>{
+                this.$store.commit("getSeachCard",response.data);
+                this.$router.push('/seach')
+            })
         }
     },
 };

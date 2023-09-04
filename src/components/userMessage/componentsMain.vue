@@ -14,7 +14,6 @@
         </div>
         <div class="text">
             <div class="icons">
-                <div @click="demo()" style="height: 20px; width: 20px; background-color: black;"></div>
                 <el-button type="text" @click="getDianZan "> <span class="iconfont icon-dianzan"></span></el-button>
                 <el-button type="text" @click="tupian = true"> <span class="iconfont icon-tupian"></span></el-button>
                 <el-button type="text" @click="zhifu = true"> <span class="iconfont icon-zhifu"></span></el-button>
@@ -51,7 +50,7 @@ export default {
             updata: false,
             direction: 'rtl',
             newMessage: "qwer",
-            userId:"",
+            userId:"123",
             message: [{
                 sender: 1,
                 msg: "aaa",
@@ -77,12 +76,17 @@ export default {
     mounted() {
     // 使用this.$store.state.XXX可以直接访问到仓库中的状态
   },
-  watch(){
-    "this.$store.state.userId";{
-        this.userId=this.$store.state.userId;
-        console.log( this.userId);
+  watch: {
+    "$store.state.userId": {   
+           //eslint-disable-next-line 
+        handler(newMessage,old){
+            this.userId= this.$store.state.userId;
+            console.log( this.userId);
+        },
+        deep: true,
     }
   },
+ 
     methods: {
         socketOpen() {
             this.$socket.open()// 开始连接 socket
@@ -109,15 +113,11 @@ export default {
                 });
         },
         getDianZan() {
-
+            
         },
         socket: {
 
         },
-        demo(){
-                    // console.log(this.items.username);
-                    console.log(this.$store.state.userMessageId);
-                }
     }
 };
 </script>

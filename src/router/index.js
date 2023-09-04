@@ -12,13 +12,14 @@ import userHistory from '../view/user/userHistory.vue'
 import userInfo from '../view/user/userInfo.vue'
 import userMessage from '../view/user/userMessage.vue'
 import userItem from '../view/userItem.vue'
+import seach from'../view/seachMain.vue'
 
 //demo
 import demo from '@/view/demo.vue'
 Vue.use(vueRouter);
 
 const routes = [
-    { path: '/main', component: Main },
+    { path: '/home', component: Main },
 
     { path: '/login', component: Login },
     { path: '/person', component: personalCenter },
@@ -31,6 +32,7 @@ const routes = [
     { path: '/resetUserInfo', component: resetUserInfo },
     { path: '/userItem', component: userItem },
     
+    { path: '/seach', component: seach },
     { path: '/demo', component: demo }
 ]
 

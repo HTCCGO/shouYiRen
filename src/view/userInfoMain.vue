@@ -15,7 +15,7 @@
 import componentsFooterVue from '../components/componentsFooter.vue'
 import componentsHeaderVue from '../components/componentsHeader.vue'
 import componentsAsideVue from '../components/userinfo/componentsAside.vue'
-import componentsMainVue from '../components/userinfo/componentsMain.vue'
+
 export default{
     data(){
         return {}
@@ -24,7 +24,7 @@ export default{
         componentsFooterVue,
         componentsHeaderVue,
         componentsAsideVue,
-        componentsMainVue
+
     }
 }
 </script>

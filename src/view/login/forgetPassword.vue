@@ -49,21 +49,41 @@ export default {
                 checkphoneNumber: [
                     { validator: validateCheckPhoneNumber, trigger: 'blur' }
                 ],
-            }
+            },
+            noCheckPhoneNumber: 0,
+            seach:"",
         };
+    },
+    watch: {
+        noCheckPhoneNumber: {
+
+            handler() {
+                if (this.noCheckPhoneNumber === 1) {
+                    this.$message.error('验证码错误');
+                    this.noCheckPhoneNumber = 0;
+                }
+            },
+        }
     },
     methods: {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    const fromData={
-                        phoneNumber:this.ruleForm.phoneNumber.value,
+                    const fromData = {
+                        phoneNumber: this.ruleForm.phoneNumber.value,
                         checkPhoneNumber: this.ruleForm.checkPhoneNumber.value,
                     }
-                    this.$http.post('/api/forgetPassword',fromData).then(function(response){
-                        console.log(response.data);
-                    }).catch(function(error){
-                        console.log(error);
+                    this.$http.post('/api/forgetPassword', fromData).then(function (response) {
+                        //判断返回的token值是否为一个空值
+                        if(response.data.token === null){
+                            //改变noCheckPhoneNumber的值，在页面显示错误
+                            this.noCheckPhoneNumber=1;
+                        }else{
+                            //.修改token的值，为一个
+                             this.$cookie.set("token",response.data.token);
+                        }
+                    }).catch(function (error) {
+                        error;
                     })
                 } else {
                     console.log('error submit!!');
