@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         getCount() {
-            this.$http.post('/getCount').then(res => {
+            this.$http.post('/seach/getCount').then(res => {
                 this.totalCount = res.data;
             })
         },

@@ -9,7 +9,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const store = new Vuex.Store({
     strict: debug,//在不是生产环境下都开启严格模式
     state: {
-
+        phoneNumber:"",
         userMessageConcatItem: [{
             userId:"",
             username: "AAA",
@@ -24,6 +24,7 @@ const store = new Vuex.Store({
             msg: "aaa",//用户发送的消息
         }],
 
+        ItemId:"",
         seach_txt:"",
         seach_card:[],
         userdescription: "",//用户描述
@@ -74,6 +75,12 @@ const store = new Vuex.Store({
         },
         getSeachPageNo(state,page){
             state.seachPage.pageNo=page.pageNo;
+        },
+        getPhoneNumber(state,phoneNumber){
+            state.phoneNumber=phoneNumber;
+        },
+        setItemId(state,itemId){
+            state.ItemId=itemId;
         }
     },
     actions: {

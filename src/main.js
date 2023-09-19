@@ -7,12 +7,14 @@ import axios from 'axios'
 // import VueSocketIO from 'vue-socket.io'
 import store from './store/index.js'
 import Cookie from 'js-cookie'
+import md5 from 'js-md5'
 
 Vue.config.productionTip = false
 Vue.use(elementUi);
 Vue.prototype.$http = axios;
 //全局注册cookie
 Vue.prototype.$cookie=Cookie;
+Vue.prototype.$md5=md5;
 // Vue.use(new VueSocketIO({
 //   debug: true,
 //   connection: 'http://localhost:3000', // socket 服务器所在地址
@@ -27,7 +29,7 @@ if(document.cookie){
 
 router.beforeEach((to, from, next) => {
   const isLoggedIn = (Cookie.get('token') !==  undefined); // 使用实际的登录状态判断
-  if (to.path !== '/login' && !isLoggedIn) {
+  if (to.path !== '/login' && !isLoggedIn && to.path !=='/registeLogin' && to.path !=="/forgetPassword") {
       next('/login');
   } else {
       next();

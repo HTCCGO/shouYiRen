@@ -7,7 +7,7 @@
             <el-form-item label="验证码 :" prop="checkPhoneNumber">
                 <el-input type="text" v-model="ruleForm.checkPhoneNumber" autocomplete="off" class="getCode"></el-input>
             </el-form-item>
-            <el-button @click="getCode()" class="Code">获取验证码</el-button>
+            <el-button @click="getCode()" class="Code">{{ codeString }}</el-button>
             <el-form-item>
                 <el-button type="primary" @click="submitForm(formName)" class="ti_jiao">提交</el-button>
             </el-form-item>
@@ -42,6 +42,8 @@ export default {
                 phoneNumber: '',
                 checkPhoneNumber: '',
             },
+            codeString: '发送验证码',
+            isTrigger: false,
             rules: {
                 phoneNumber: [
                     { validator: validatePhoneNumber, trigger: 'blur' }
@@ -51,39 +53,60 @@ export default {
                 ],
             },
             noCheckPhoneNumber: 0,
-            seach:"",
+            codeNumber: false,
         };
     },
     watch: {
         noCheckPhoneNumber: {
-
             handler() {
                 if (this.noCheckPhoneNumber === 1) {
                     this.$message.error('验证码错误');
                     this.noCheckPhoneNumber = 0;
                 }
             },
-        }
+        },
+        codeNumber: {
+                handler() {
+                    if (this.codeNumber === true) {
+                        if (this.isTrigger) return
+                        let n = 60;
+                        let inval = setInterval(
+                            () => {
+                                if (n === 0) {
+                                    this.codeString = '获取验证码'
+                                    this.isTrigger = false
+                                    clearInterval(inval)
+                                } else {
+                                    this.isTrigger = true;
+                                    this.codeString = `${n--}秒后重发`;
+                                }
+                            },
+                            1000,
+                        );
+                    }
+                }
+            }
     },
     methods: {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     const fromData = {
-                        phoneNumber: this.ruleForm.phoneNumber.value,
-                        checkPhoneNumber: this.ruleForm.checkPhoneNumber.value,
+                        phoneNumber: this.ruleForm.phoneNumber,
+                        code: this.ruleForm.checkPhoneNumber,
                     }
                     this.$http.post('/api/forgetPassword', fromData).then(function (response) {
-                        //判断返回的token值是否为一个空值
-                        if(response.data.token === null){
-                            //改变noCheckPhoneNumber的值，在页面显示错误
-                            this.noCheckPhoneNumber=1;
-                        }else{
-                            //.修改token的值，为一个
-                             this.$cookie.set("token",response.data.token);
+                        //比较后端发回的code值,两者之间的值为一个对应的数值
+                        if (response.data.data.code === this.ruleForm.checkPhoneNumber) {
+                            //传到下一页面并且将电话号码放在vuex中
+                            this.$router.push('/forgetPassword_');
+                            this.$store.commit('getPhoneNumber', this.ruleForm.phoneNumber);
+                        } else {
+                            //noCheckPhoneNumber的值，说明两者之间并未对应
+                            this.noCheckPhoneNumber = 1;
                         }
                     }).catch(function (error) {
-                        error;
+                        console.log(error);
                     })
                 } else {
                     console.log('error submit!!');
@@ -98,13 +121,14 @@ export default {
             if (phoneNumber !== '') {
                 const fromData = {
                     phoneNumber: phoneNumber,
-                };
-                console.log(fromData);
-                this.$http.post('/api/getCode', fromData).then(response => {
+                }
+                this.$http.post('/api/login/getCode', fromData).then(response => {
+                
                     console.log(response.data);
-                    //打印返回的数据
-                    // 处理响应数据
-                })
+                    if (response.data.code === 10000) {
+                        this.codeNumber = true;
+                    }
+                });
             } else {
                 console.log('submit Error');
             }

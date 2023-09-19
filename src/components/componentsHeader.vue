@@ -54,7 +54,9 @@ export default {
             //上传搜索信息
             this.$http.post('/api/seach',fromData).then(response=>{
                 this.$store.commit("getSeachCard",response.data);
-                this.$router.push('/seach')
+                console.log(response);
+                //当值成功获取之后才开始转
+                this.$router.push('/seach');
             })
         }
     },

@@ -20,7 +20,7 @@
                 <el-button type="text" @click="updata = true"> <span
                         class="iconfont icon-shangchuandaochu"></span></el-button>
             </div>
-            <textarea v-model="newMessage"></textarea>
+            <textarea v-model="newMessage" @keyup.enter.native="getMessage()"></textarea>
             <div>
                 <el-button size="small" @click="getMessage()">发送</el-button>
                 <el-button type="danger" size="small">取消</el-button>
@@ -49,8 +49,8 @@ export default {
         return {
             updata: false,
             direction: 'rtl',
-            newMessage: "qwer",
-            userId:"123",
+            newMessage: "",
+            userId:"123",//对方的Id值
             message: [{
                 sender: 1,
                 msg: "aaa",
@@ -84,6 +84,19 @@ export default {
             console.log( this.userId);
         },
         deep: true,
+    },
+
+    //userId是对面的一个值
+    userId:{
+        handler(){
+            const fromData={
+                userId:this.$store.state.userId,//对方的Id值
+                token:this.$cookie.get("token"),//我方的Id值
+            }
+            this.$http.post("/api/userMesssage/watchUserId",fromData).then(req=>{
+                this.message=req.data;
+            })
+        }
     }
   },
  
@@ -101,6 +114,16 @@ export default {
         },
         closeSocket() {
             this.$socket.close()
+        },
+        getMessage(){
+            const fromData={
+                token:this.$cookie.get("token"),//我方的Id值
+                userId:this.userId,//对方的Id值
+                message:this.newMessage,
+            }
+            this.$http.post("/api/userMesssage/getNewMessage",fromData).then(req=>{ 
+                this.message=req.data;
+            });
         },
         handleClose(done) {
             this.$confirm('确认关闭？')

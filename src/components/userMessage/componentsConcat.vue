@@ -32,15 +32,22 @@ export default {
         }
     },
     mounted(){
-        this.$store.commit('setConcatItems',this.items)
+        this.getItems();
+        this.$store.commit('setConcatItems',this.items);
     },
     methods: {
                 emitEvent() {
                     this.$emit("passtofather", this.sonMsg);
                 },
                 getUserName(userId){
-                    this.$store.commit('setuserId',userId);
+                    userId;
+                    this.$store.commit('setuserId',this.$cookie.get("token"));
                 },
+                getItems(){
+                    this.$http.post('/api/userMessage/Concat',this.$cookie.get("token")).then(req=>{
+                        this.items=req.data;
+                    });
+                }
             },
 }
 </script>

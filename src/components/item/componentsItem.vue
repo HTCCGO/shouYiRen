@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="index">
-            <img src="" alt="" class="cle">
+            <img :src="userImg" alt="" class="cle">
             <!-- 物品描述 -->
             <div class="userDescription">
                 <p>{{ userdescription }}</p>
@@ -11,7 +11,7 @@
                 <div class="block">
                     <el-carousel height="250px">
                         <el-carousel-item v-for="item in 4" :key="item">
-                            <h3 class="small">{{ item }}</h3>
+                           <img :src="item.src">
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -38,11 +38,33 @@ export default {
         return {
             userdescription: "",
             itemdescription: "",
+            userImg:"",
+            item:[
+                {id:1,src:""},
+                {id:1,src:""},
+                {id:1,src:""},
+                {id:1,src:""},
+                {id:1,src:""},
+            ],
         }
     },
+    mounted() {
+        this.getData();
+    },
     methods: {
+        //TODO完成一个两方进行相互交流的页面
         getMessage() {
-
+            this.$router.push('')
+        },
+        getData(){
+            const Id={
+                itemId:this.$store.state.ItemId,
+                userId:this.$store.state.userId,
+            }
+            this.$http.post("/userItem/getData",Id).then(req=>{
+                this.userdescription=req.data.data.userdescription;
+                this.itemdescription=req.data.data.itemdescription;
+            });
         }
     }
 }

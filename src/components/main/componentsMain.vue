@@ -3,21 +3,22 @@
         <div class="MainHeader">
             <el-carousel indicator-position="outside">
                 <el-carousel-item v-for="item in cardHeader" :key="item.id">
-                    <h3>{{ item.title }}</h3>
+                    <!-- 利用静态的链接来完成 -->
+               <img :src="cardHeader.src" alt="">
                 </el-carousel-item>
             </el-carousel>
         </div>
 
         <el-row>
             <el-col :span="6" v-for="item in cardData" :key="item.id">
-                <el-card :body-style="{ padding: '5px' }" shadow="always">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                <el-card :body-style="{ padding: '5px' }" shadow="hover">
+                    <img :src="cardData.src"
                         class="image">
                     <div style="padding: 14px;">
                         <span>{{ item.title }}</span>
                         <div class="bottom clearfix">
                             <!-- <time class="time">{{ currentDate }}</time> -->
-                            <el-button type="primary" class="buttom" size="mini">立即进入</el-button>
+                            <el-button type="primary" class="buttom" size="mini" @click="getCard(item)">立即进入</el-button>
                         </div>
                     </div>
                 </el-card>
@@ -44,18 +45,18 @@ export default {
         return {
             currentDate: new Date(),
             cardData: [
-                { id: 1, title: 'Card 1', content: 'Content 1', src: '', text: ' 11' },
+                { id: 1, title: 'Card 1', itemId: 'Content 1', src: '', text: ' 11' },
                 { id: 2, title: 'Card 2', content: 'Content 2', src: '', text: ' 11' },
                 { id: 3, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
                 { id: 4, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
                 // 添加更多的卡片数据...
             ],
             cardHeader: [
-                { id: '1', title: 'header1' },
-                { id: '2', title: 'header2' },
-                { id: '3', title: 'header3' },
-                { id: '4', title: 'header4' },
-                { id: '5', title: 'header5' },
+                { id: '1', src: 'header1' },
+                { id: '2', src: 'header2' },
+                { id: '3', src: 'header3' },
+                { id: '4', src: 'header4' },
+                { id: '5', src: 'header5' },
             ],
             userList: [],
             pageNo: 1,//默认当前页面为第一页
@@ -108,7 +109,12 @@ export default {
             })
         },
     },
-
+    getCard(item){
+            //将值存储在vuex中，以便在其他的组件中使用
+            this.$store.commit('setItemId',item.itemId);
+            //转移到新的页面
+            this.$router.push('/userItem');
+    },
 }
 </script>
 

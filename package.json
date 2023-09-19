@@ -10,8 +10,10 @@
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.13",
+    "encryptlong": "^3.1.4",
     "eslint-plugin-vue": "^9.17.0",
     "js-cookie": "^3.0.5",
+    "js-md5": "^0.7.3",
     "less": "^4.1.2",
     "less-loader": "^6.0.0",
     "mockjs": "^1.1.0",
@@ -28,6 +30,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "jsencrypt": "^3.3.2",
     "vue-svgicon": "^3.3.2",
     "vue-template-compiler": "^2.6.14"
   }

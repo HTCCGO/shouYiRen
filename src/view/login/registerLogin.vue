@@ -16,7 +16,7 @@
       <el-form-item label="验证码:" prop="checkPhoneNumber" class="checkPhoneNumber">
         <el-input type="text" v-model="ruleForm.checkPhoneNumber"></el-input>
       </el-form-item>
-      <el-button class="cpn_button" @click="getCode()">发送验证码</el-button>
+      <el-button class="cpn_button" @click="getCode()">{{ codeString }}</el-button>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')" class="ti_jiao">提交</el-button>
       </el-form-item>
@@ -28,7 +28,9 @@
 export default {
   data() {
     var phoneNumber = (rule, value, callback) => {
-      if (!value) {
+      if (!value.length !== 11) {
+        return callback(new Error('请输入一个正确的手机号码'));
+      } else {
         return callback(new Error('手机号码不能为空'));
       }
     };
@@ -36,9 +38,6 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'));
       } else {
-        if (this.ruleForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass');
-        }
         callback();
       }
     };
@@ -63,8 +62,17 @@ export default {
       } else if (value.length !== 6) {
         callback(new Error('验证码错误'))
       } else {
-        callback();
+        this.$http.post('/api/login/getCode', this.ruleForm.phoneNumber).then(req => {
+          if (req.data.data.code !== this.ruleForm.checkPhoneNumber) {
+            callback(new Error('验证码错误'));
+          } else {
+            callback(new Error());
+          }
+        })
       }
+      //查看code的值
+
+
     }
     return {
       ruleForm: {
@@ -72,8 +80,10 @@ export default {
         pass: '',
         checkPass: '',
         phoneNumber: '',
-        checkPhoneNumber: ''
+        checkPhoneNumber: '',
       },
+      codeString: '发送验证码',
+      isTrigger: false,
       rules: {
         username: [{
           validator: validateUsername, trigger: 'blur'
@@ -100,14 +110,22 @@ export default {
           alert('submit!');
           const fromData = {
             username: this.ruleForm.username,
-           password: this.ruleForm.pass,
+            password: this.ruleForm.pass,
             phoneNumber: this.ruleForm.phoneNumber,
-            checkPhoneNumber:this.ruleForm.checkPhoneNumber,
+            checkPhoneNumber: this.ruleForm.checkPhoneNumber,
           }
-
-          console.log(fromData);
-          this.$http.post('/api/getCode', fromData).then(function (response) {
-            console.log(response.data);
+          this.$http.post('/api/signIn', fromData).then(function (response) {
+            //如果说两者的值并不相同，则
+            if (response.data.code === 10000) {
+              if (response.data.data.code !== this.ruleForm.checkPhoneNumber) {
+                console.log("验证码错误");
+              } else {
+                //转移到对应的路由中去
+                this.$router.push('/login');
+              }
+            } else {
+              console.log("submit error !");
+            }
           }).catch(function (error) {
             console.log(error);
           })
@@ -118,15 +136,14 @@ export default {
       });
     },
 
-    getCode() {
-    
+    async getCode() {
       const phoneNumber = this.ruleForm.phoneNumber;
 
-      if (phoneNumber !== '') {
+      if (phoneNumber !== "") {
         const fromData = {
           phoneNumber: phoneNumber,
         };
-        console.log(fromData);
+        fromData;
         this.$http.post('/api/getCode', fromData).then(response => {
           console.log(response.data);
           //打印返回的数据
@@ -135,12 +152,29 @@ export default {
       } else {
         console.log('submit Error');
       }
+      if (this.isTrigger) return
+      let n = 60;
+      let inval = setInterval(
+        () => {
+          if (n === 0) {
+            this.codeString = '获取验证码'
+            this.isTrigger = false
+            clearInterval(inval)
+          } else {
+            this.isTrigger = true
+            this.codeString = `${n--}秒后重发`
+          }
+        },
+        1000
+      );
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
   }
 }
+
+
 </script>
 
 <style lang="less" scoped>

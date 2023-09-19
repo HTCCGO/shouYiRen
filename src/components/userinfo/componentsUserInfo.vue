@@ -54,21 +54,18 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination :page-size="20" :pager-count="11" layout="prev, pager, next" :total="1000" class="pagin">
+      <el-pagination :page-size="pagesize" :pager-count="pageNo" layout="prev, pager, next" :total="totalCount" class="pagin">
       </el-pagination>
     </div>
 
   </div>
 </template>
 
-
-
 <script>
 export default {
   data() {
     return {
       props:{
-
       },
       tableNumber:5,
       tableData: [{
@@ -131,17 +128,38 @@ export default {
         ],
         workAddress:"江苏省苏州市吴中区吴中大道 1188 号",
       },
+      pageNo: 1,//默认当前页面为第一页
+      pagesize: 5,//默认当前每页的数据为4条
+      totalCount: 0,//默认总数为0
+      deleteApiNumber:0,
     }
   },
   mounted(){
-      // this.getTableData();//获取tableData的数据
+      this.getTableData();//获取tableData的数据
       this.getUser();
-  }
-  ,
+      this.getTotalCount();
+  },
+  watch:{
+    pageNo:{
+      handler(){
+        this.getTableData();
+      },
+    }
+  },
   methods: {
-    handleDelete(index, row) {
+    handleDelete(index) {
+      //删除选中的数据
       this.tableData.splice(index,1);
-      this.$http.post('/api/userInfo/deletTableData',row.id);
+      //将对应的pageNo发送给后端服务器。
+      const fromData={
+        pageNo:this.pageNo,
+        deleteData:this.tableData[index],
+        deleteApiNumber:this.deleteApiNumber,
+      };
+      this.$http.post('/api/userInfo/deleteTableData',fromData).then(req=>{
+        this.tableData.push(req.data);
+      })
+      this.deleteApiNumber++;
     },
     handleEditTure(index) {
       //设置为input可见
@@ -157,7 +175,11 @@ export default {
       this.$http.post("/api/userIndo/getTableData",fromData);
     },
     getTableData(){
-      this.$http.post('/api/userInfo/tableData',this.$cookie.get("token")).then(req=>{
+      const fromData={
+        token:this.$cookie.get("token"),
+        pageNo:this.pageNo,
+      }
+      this.$http.post('/api/userInfo/tableData',fromData).then(req=>{
         this.tableData=req.data;
       });
     },
@@ -165,7 +187,13 @@ export default {
       this.$http.post('/api/userInfo/user',this.$cookie.get("token")).then(req=>{
         this.tableData=req.data;
       });
-    }
+    },
+    getTotalCount(){
+      this.$http.post('/api/userinfo/getTotalCount',this.$cookie.get("token")).then(res=>{
+        this.totalCount=res.data;
+      });
+      
+    },
   }
 }
 </script>
