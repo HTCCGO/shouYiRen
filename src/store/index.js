@@ -16,6 +16,9 @@ const store = new Vuex.Store({
             message: "",
         }],
 
+        code:true,//存储用户的数据类型，如果为true,说明是用户，如果为flase，说明是商户
+        router:"/home",
+
         userId:"123",
         userMessageId:"112233",
 
@@ -81,6 +84,9 @@ const store = new Vuex.Store({
         },
         setItemId(state,itemId){
             state.ItemId=itemId;
+        },
+        setRouter(state,router){
+            state.router=router;
         }
     },
     actions: {

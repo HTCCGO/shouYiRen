@@ -43,7 +43,6 @@ export default {
     },
     methods: {
         login_button() {
-
             let formData = { // 将表单数据组织成适当的格式
                 username: this.username,
                 password: this.$md5(this.password),
@@ -53,6 +52,7 @@ export default {
                 //将token的值赋值给cookies
                 if(response.data.data.code === 10000){
                        cookies.set("token", response.data.data.token);
+                       this.$store.state.code=response.data.data.userCode;
                 }else{
                     console.log("submit error!");
                 } 

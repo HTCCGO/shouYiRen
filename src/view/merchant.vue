@@ -5,10 +5,13 @@
                 <el-input v-model="form.name" style="width: 250px;"></el-input>
             </el-form-item>
             <el-form-item label="手艺人地区">
-                <el-select v-model="form.region" placeholder="请选择商店地区">
+                <el-select v-model="form.address" placeholder="请选择商店地区">
                     <el-option label="区域一" value="shanghai"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
+            </el-form-item>
+            <el-form-item label="手艺人工作地区">
+               <el-input v-model="form.workAddress" style="width: :250px;"></el-input>
             </el-form-item>
             <el-form-item label="手艺人类型">
                 <el-checkbox-group v-model="form.type">
@@ -35,21 +38,39 @@
       return {
         form: {
           name: '',
-          region: '',
-
+          address: '',
+          workAddress:"",
           type: [],
-          resource: '',
           desc: ''
         }
       }
     },
     methods: {
       onSubmit() {
-
+          const formDate={
+              name:this.form.name,
+              address:this.form.address,
+              workAddress:this.form.workAddress,
+              type:this.form.type,
+              desc:this.form.desc,
+          }
+          //提交表单数据
+          this.$http.post("/api/reset/merchant",formDate).then(req=>{
+            if(req.data.data.code !== 200){
+                this.$router.push('/succes');
+            }
+          }
+          ).catch(err=>{
+            err;
+            this.$store.commit("setRouter","/merchant")
+            this.$router.push('/error')
+          }
+            );
+          this.$store.commit("setRouter","/merchant");
       },
       black(){
         //返回路由
-        this.$router.push('/resetUserInfo');
+        this.$router.push(this.$store.state.router);
       },
     }
   }
@@ -64,5 +85,8 @@
      box-shadow: 0 0 25px #cac6c6;
     margin-top: 150px;
     margin-left: 400px;
+    padding-top: 30px;
+    padding-left: 15px;
+    padding-bottom: 20px;
 }
 </style>

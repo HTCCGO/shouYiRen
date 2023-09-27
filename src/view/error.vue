@@ -10,8 +10,8 @@
 export default{
   methods:{
     getResut(){
-        //返回修改页面
-      this.$router.push('/resetUserInfo')
+        //返回到vuex存储的页面
+      this.$router.push(this.$store.state.router);
 },
   }}
 </script>

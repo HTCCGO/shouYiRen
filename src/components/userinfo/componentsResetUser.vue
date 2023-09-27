@@ -8,8 +8,7 @@
                 <el-form-item label="头像">
                     <el-upload
                          class="avatar-uploader"
-                         action="https://jsonplaceholder.typicode.com/posts/"
-                         :show-file-list="false"
+                         action="http://localhost:3000/post/resetUser"
                          :on-success="handleAvatarSuccess"
                          :before-upload="beforeAvatarUpload">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -72,19 +71,22 @@ export default {
           type:  this.form.type,
           desc:  this.form.desc,
         };
-        this.$http.post("/reset/user",formData).then(req=>{
+        this.$http.post("/api/reset/user",formData).then(req=>{
           if(req.data.data.code !== 200){
             //转到成功页面
                 this.$router.push('/success');
           }else{
             //转到失败页面
               this.$router.push('/error');
+              //上传到vuex中
+              this.$store.commit("setRouter","/resetUserInfo");
           }
         }).catch(err=>{
           console.log(err);
         })
       },
       handleAvatarSuccess(res, file) {
+        this.imageUrl=res;
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload(file) {
@@ -101,6 +103,7 @@ export default {
       },
       signIn(){
         //转到商户注册页面
+        this.$store.commit("setRouter","/resetUserInfo")
         this.$router.push('/merchant');
       },
     }
