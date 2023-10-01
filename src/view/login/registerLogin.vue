@@ -1,5 +1,6 @@
 <template>
   <div class="registerLogin_main">
+    <h3 class="login_title">注册</h3>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户名:" prop="username">
         <el-input type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
@@ -18,7 +19,7 @@
       </el-form-item>
       <el-button class="cpn_button" @click="getCode()">{{ codeString }}</el-button>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')" class="ti_jiao">提交</el-button>
+        <el-button type="primary" @click="submitForm()" class="ti_jiao">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -28,10 +29,12 @@
 export default {
   data() {
     var phoneNumber = (rule, value, callback) => {
-      if (!value.length !== 11) {
-        return callback(new Error('请输入一个正确的手机号码'));
-      } else {
+      if (value === "") {   
         return callback(new Error('手机号码不能为空'));
+      } else if(value.length !== 11){
+      return callback(new Error('请输入一个正确的手机号码'));
+      }else{
+        return callback();
       }
     };
     var validatePass = (rule, value, callback) => {
@@ -59,20 +62,11 @@ export default {
     const checkPhoneNumber = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入验证码'))
-      } else if (value.length !== 6) {
+      } else if (value.length !== 4) {
         callback(new Error('验证码错误'))
       } else {
-        this.$http.post('/api/login/getCode', this.ruleForm.phoneNumber).then(req => {
-          if (req.data.data.code !== this.ruleForm.checkPhoneNumber) {
-            callback(new Error('验证码错误'));
-          } else {
-            callback(new Error());
-          }
-        })
+          callback();
       }
-      //查看code的值
-
-
     }
     return {
       ruleForm: {
@@ -104,36 +98,29 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {//
-        if (valid) {
-          alert('submit!');
+    submitForm() {
           const fromData = {
             username: this.ruleForm.username,
-            password: this.ruleForm.pass,
+            password: this.$md5(this.ruleForm.pass),
             phoneNumber: this.ruleForm.phoneNumber,
             checkPhoneNumber: this.ruleForm.checkPhoneNumber,
           }
-          this.$http.post('/api/signIn', fromData).then(function (response) {
-            //如果说两者的值并不相同，则
-            if (response.data.code === 10000) {
-              if (response.data.data.code !== this.ruleForm.checkPhoneNumber) {
-                console.log("验证码错误");
-              } else {
-                //转移到对应的路由中去
-                this.$router.push('/login');
-              }
-            } else {
-              console.log("submit error !");
+
+          if(fromData.phoneNumber === '' ){
+            this.$message.error('手机号为空');
+          }else{
+            this.$http.post('/api/login/signIn', fromData).then((response)=> {
+            if(response.data.code === 300){
+              this.$message.success('注册成功,请返回登录页面');
+            }else if(response.data.code === 400){
+              this.$message.error('验证码错误');
+            }else if(response.data.code === 500){
+              this.$message.error('该手机号已经注册');
             }
-          }).catch(function (error) {
+          }).catch((error)=> {
             console.log(error);
           })
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
+          }
     },
 
     async getCode() {
@@ -143,11 +130,13 @@ export default {
         const fromData = {
           phoneNumber: phoneNumber,
         };
-        fromData;
-        this.$http.post('/api/getCode', fromData).then(response => {
-          console.log(response.data);
-          //打印返回的数据
-          // 处理响应数据
+ 
+        this.$http.post('/api/login/getCode', fromData).then(response => {
+              if(response.data.data){
+                this.$message.success('验证码发送成功');
+              }else{
+                this.$message.error('验证码发送失败');
+              }
         })
       } else {
         console.log('submit Error');
@@ -168,9 +157,6 @@ export default {
         1000
       );
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    }
   }
 }
 
@@ -184,7 +170,7 @@ export default {
   margin-top: 100px;
   width: 450px;
   border: 1px solid #eaeaea;
-  padding-top: 70px;
+  padding-top: 30px;
   padding-right: 50px;
   box-shadow: 0 0 25px #cac6c6;
   border-radius: 15px;
@@ -205,5 +191,12 @@ export default {
   position: relative;
   top: -61px;
   left: 340px;
+}
+h3{
+        font-size: 20px;
+        font-weight: 100;
+        position: relative;
+        top: -15px;
+        left: 230px;
 }
 </style>

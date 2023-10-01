@@ -26,8 +26,8 @@ export default {
   },
   computed: {
     header() {
-    const code=this.$store.state.code;
-     if(code){
+    const user=this.$store.state.user;
+     if(user){
         return "componentsHeaderVue";
      }else{
         return "componentsHeaderVue_";

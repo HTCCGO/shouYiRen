@@ -31,18 +31,18 @@ export default {
             ],
         }
     },
-    mounted(){
+    created(){
         this.getItems();
-        this.$store.commit('setConcatItems',this.items);
+        //将第一个信息发送到vuex中去
+        this.$store.commit("setuserId",this.items[1].userId);
     },
     methods: {
-                emitEvent() {
-                    this.$emit("passtofather", this.sonMsg);
-                },
+             //当点击后将对方的id值传入到vuex中
                 getUserName(userId){
-                    userId;
-                    this.$store.commit('setuserId',this.$cookie.get("token"));
+                    //当点击后将对方的id值传入到vuex中
+                    this.$store.commit('setuserId',userId);
                 },
+                //向服务器进行请求，来获取所有有关的信息
                 getItems(){
                     this.$http.post('/api/userMessage/Concat',this.$cookie.get("token")).then(req=>{
                         this.items=req.data;

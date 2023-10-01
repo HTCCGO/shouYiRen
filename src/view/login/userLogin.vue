@@ -10,7 +10,7 @@
                 <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button style="margin-left: 90px; margin-top: 10px;" @click="login_button()"
+                <el-button style="margin-left: 90px; margin-top: 10px;" @click="login()"
                     class="login_button">登录</el-button>
             </el-form-item>
             <el-form-item>
@@ -42,24 +42,25 @@ export default {
         }
     },
     methods: {
-        login_button() {
+        login() {
             let formData = { // 将表单数据组织成适当的格式
-                username: this.username,
-                password: this.$md5(this.password),
+                username: this.form.username,
+                password: this.$md5(this.form.password),
                 // 在此添加其他表单字段
             }
-            this.$http.post('/api/login/userLogin', formData).then(function (response) {
+            this.$http.post('/api/login/userLogin', formData).then( (response)=> {
                 //将token的值赋值给cookies
-                if(response.data.data.code === 10000){
-                       cookies.set("token", response.data.data.token);
-                       this.$store.state.code=response.data.data.userCode;
-                }else{
-                    console.log("submit error!");
+                if(response.data.code === 10000){
+                       cookies.set("token", response.data.token);
+                       this.$store.commit("setUser",response.data.user);
+                       this.$router.push('/home');
+                }else if(response.data.code === 200){
+                    this.$message.error("用户名或密码错误");
                 } 
-            }).catch(function (error) {
+            }).catch( (error) =>{
                 console.log(error);
             });
-            this.$router.push('/home');
+            
         },
         login_register() {
             //将路由转移到对应的位置

@@ -37,16 +37,12 @@ const routes = [
     { path: '/forgetPassword', component: forgetPassword },
     { path: '/forgetPassword_', component: forgetPassword_ },
 
-    { path: '/user', 
-        children:[
-            { path: '/userInfo', component: userInfo },
-            { path: '/userMessage', component: userMessage },
-            { path: '/userHistory', component: userHistory },
-            { path: '/resetUserInfo', component: resetUserInfo },
-            { path: '/userItem', component: userItem },
-        ]   
-    },
-    
+    { path: '/userInfo', component: userInfo },
+     { path: '/userMessage', component: userMessage },
+    { path: '/userHistory', component: userHistory },
+     { path: '/resetUserInfo', component: resetUserInfo },
+    { path: '/userItem', component: userItem },
+
     { path: '/seach', component: seach },
     { path: '/demo', component: demo },
 
@@ -57,14 +53,11 @@ const routes = [
     { path: '/upDataItem', component: upDataItem },
     { path: '/pay', component: pay },
 
-    { path: '/merchant',
-        children: [
-                  { path: '/userInfo', component: merchantUserInfo },
-                  { path: '/UserHistory', component: merchantUserHistory },
-                  { path: '/UserMessage', component: merchantUserMessage },
-                  { path: '/resetUser', component: merchantResetUserInfo }
-        ]
-    } 
+    
+    { path: '/merchant/userInfo', component: merchantUserInfo },
+    { path: '/merchant/UserHistory', component: merchantUserHistory },
+    { path: '/merchant/UserMessage', component: merchantUserMessage },
+    { path: '//merchant/resetUser', component: merchantResetUserInfo },
 ]
 
 const router = new vueRouter({

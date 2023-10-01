@@ -14,11 +14,9 @@
         </div>
         <div class="text">
             <div class="icons">
-                <el-button type="text" @click="getDianZan "> <span class="iconfont icon-dianzan"></span></el-button>
                 <el-button type="text" @click="tupian = true"> <span class="iconfont icon-tupian"></span></el-button>
-                <el-button type="text" @click="zhifu = true"> <span class="iconfont icon-zhifu"></span></el-button>
-                <el-button type="text" @click="updata = true"> <span
-                        class="iconfont icon-shangchuandaochu"></span></el-button>
+                <el-button type="text" @click="zhifu = true"> <span class="iconfont icon-zhifu" @click="getZhiFu()"></span></el-button>
+                <el-button type="text" @click="updata = true"> <span class="iconfont icon-shangchuandaochu"></span></el-button>
             </div>
             <textarea v-model="newMessage" @keyup.enter.native="getMessage()"></textarea>
             <div>
@@ -32,7 +30,6 @@
                 action="https://jsonplaceholder.typicode.com/posts/" multiple>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-
             </el-upload>
             <el-button type="primary" @click="updata = false" style="margin-left: 140px;">确 认</el-button>
             <el-button @click="updata = false" style="margin-left: 270px;">取 消</el-button>
@@ -42,15 +39,15 @@
 </template>
 
 
-<script>
+<script>    
 export default {
-
     data() {
         return {
             updata: false,
             direction: 'rtl',
             newMessage: "",
             userId:"123",//对方的Id值
+            socket:null,
             message: [{
                 sender: 1,
                 msg: "aaa",
@@ -75,8 +72,10 @@ export default {
     },
     mounted() {
     // 使用this.$store.state.XXX可以直接访问到仓库中的状态
+    this.connectWebSocket(); // 连接WebSocket服务器
   },
   watch: {
+    //直接监视useId的值类型
     "$store.state.userId": {   
            //eslint-disable-next-line 
         handler(newMessage,old){
@@ -84,8 +83,8 @@ export default {
             console.log( this.userId);
         },
         deep: true,
+        Immediate :true,
     },
-
     //userId是对面的一个值
     userId:{
         handler(){
@@ -101,20 +100,6 @@ export default {
   },
  
     methods: {
-        socketOpen() {
-            this.$socket.open()// 开始连接 socket
-        },
-        socketSendmsg() { // 发送消息
-            this.$socket.emit('hello', '这里是客户端')
-        },
-        lockResult() {
-            console.log('链接状态', this.$socket.connected)
-            console.log('this.$socket', this.$socket)
-            console.log('this.sockets', this.sockets)
-        },
-        closeSocket() {
-            this.$socket.close()
-        },
         getMessage(){
             const fromData={
                 token:this.$cookie.get("token"),//我方的Id值
@@ -135,13 +120,40 @@ export default {
                     _
                 });
         },
-        getDianZan() {
-            
+        getZhiFu(){
+            //转移到支付界面
+            this.$router.push('/pay');
         },
-        socket: {
-
+        connectWebSocket(){
+            //新建一个WebSocket连接
+            this.socket = new WebSocket('ws://localhost:3001/pay');
+            this.socket.addEventListener("open", () => {
+                console.log("WebSocket连接已打开");
+                //连接的时候发送对应的
+                this.socket.send("Hello Server!");
+            });
+             this.socket.addEventListener("message", (event) => {
+                console.log("接收到消息:", event.data);
+                //将新增的data数据新增到数据最后。
+                this.message.push(event.data);
+            });
+            this.socket.addEventListener("error", (error) => {
+                console.log("WebSocket连接出错:", error);
+            });
         },
-    }
+        //关闭socket连接
+        closeWebSocket(){
+            this.socket.addEventListener("close", () => {
+            console.log("WebSocket连接已关闭");
+            this.socket=null;
+            this.$router.push("/home");
+            });
+        },
+        
+    },
+    beforeDestroy(){
+        this.closeWebSocket();
+    },
 };
 </script>
 

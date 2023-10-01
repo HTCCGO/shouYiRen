@@ -51,7 +51,7 @@ export default {
     },
 
     connectWebSocket() {
-      this.socket = new WebSocket('ws://localhost:3001');
+      this.socket = new WebSocket('ws://localhost:3001/pay');
       this.socket.addEventListener("open", () => {
         console.log("WebSocket连接已打开");
         this.socket.send("Hello Server!");

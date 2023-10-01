@@ -17,6 +17,9 @@
                 <el-form-item label="联系号码">
                     <el-input v-model="form.phoneNumber" style="width: 200px;"></el-input>
                 </el-form-item>
+                <el-form-item label="物品价格">
+                    <el-input v-model="form.totalAmount" style="width: 200px;"></el-input>
+                </el-form-item>
                 <el-form-item label="开始时间">
                     <el-date-picker v-model="form.data1" type="date" placeholder="选择日期" style="width: 200px;">
                     </el-date-picker>
@@ -68,6 +71,7 @@ export default {
             form: {
                 username: '',
                 phoneNumber: "",
+                totalAmount:0,
                 address: "",
                 type: [],
                 desc: '',
@@ -82,6 +86,8 @@ export default {
             const formData = {
                 username: this.form.username,
                 phoneNumber: this.form.phoneNumber,
+                //将价格转化为分后进行传输
+                totalAmount:(this.form.totalAmount)*100,
                 adress: this.form.adress,
                 type: this.form.type,
                 desc: this.form.desc,

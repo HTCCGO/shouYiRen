@@ -1,5 +1,6 @@
 <template>
     <div class="forget_password">
+        <h3 class="login_title">忘记密码</h3>
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="手机号码 :" prop="phoneNumber">
                 <el-input type="text" v-model="ruleForm.phoneNumber" autocomplete="off"></el-input>
@@ -9,7 +10,7 @@
             </el-form-item>
             <el-button @click="getCode()" class="Code">{{ codeString }}</el-button>
             <el-form-item>
-                <el-button type="primary" @click="submitForm(formName)" class="ti_jiao">提交</el-button>
+                <el-button type="primary" @click="submitForm()" class="ti_jiao">提交</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -31,7 +32,7 @@ export default {
         const validateCheckPhoneNumber = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请输入验证码'))
-            } else if (value.length !== 6) {
+            } else if (value.length !== 4) {
                 callback(new Error('验证码错误'))
             } else {
                 callback();
@@ -48,7 +49,7 @@ export default {
                 phoneNumber: [
                     { validator: validatePhoneNumber, trigger: 'blur' }
                 ],
-                checkphoneNumber: [
+                checkPhoneNumber: [
                     { validator: validateCheckPhoneNumber, trigger: 'blur' }
                 ],
             },
@@ -88,16 +89,15 @@ export default {
             }
     },
     methods: {
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
+        submitForm() {
                     const fromData = {
                         phoneNumber: this.ruleForm.phoneNumber,
                         code: this.ruleForm.checkPhoneNumber,
                     }
-                    this.$http.post('/api/forgetPassword', fromData).then(function (response) {
+                    this.$http.post('/api/login/forgetPassword', fromData).then( (response)=> {
                         //比较后端发回的code值,两者之间的值为一个对应的数值
-                        if (response.data.data.code === this.ruleForm.checkPhoneNumber) {
+                       
+                        if (response.data.data) {
                             //传到下一页面并且将电话号码放在vuex中
                             this.$router.push('/forgetPassword_');
                             this.$store.commit('getPhoneNumber', this.ruleForm.phoneNumber);
@@ -105,14 +105,9 @@ export default {
                             //noCheckPhoneNumber的值，说明两者之间并未对应
                             this.noCheckPhoneNumber = 1;
                         }
-                    }).catch(function (error) {
+                    }).catch( (error)=> {
                         console.log(error);
                     })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
         },
 
         getCode() {
@@ -123,10 +118,10 @@ export default {
                     phoneNumber: phoneNumber,
                 }
                 this.$http.post('/api/login/getCode', fromData).then(response => {
-                
-                    console.log(response.data);
                     if (response.data.code === 10000) {
                         this.codeNumber = true;
+                    }else{
+                        this.$message.error('验证码发送失败');
                     }
                 });
             } else {
@@ -142,7 +137,7 @@ export default {
     width: 340px;
     border: 1px solid #eaeaea;
     margin: 180px auto;
-    padding-top: 60px;
+    padding-top: 40px;
     padding-right: 50px;
     background-color: #fff;
     border-radius: 15px;
@@ -163,6 +158,13 @@ export default {
     position: relative;
     top: -25px;
     left: 58px;
+}
+h3{
+        font-size: 20px;
+        font-weight: 100;
+        position: relative;
+        top: -20px;
+        left: 150px;
 }
 </style>
 
