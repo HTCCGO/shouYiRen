@@ -7,7 +7,7 @@
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="用户姓名" width="150">
+        <el-table-column label="用户姓名" width="130">
           <template slot-scope="scope">
             <el-popover trigger="hover" placement="top">
               <p>姓名: {{ scope.row.name }}</p>
@@ -18,23 +18,24 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column label="订单描述" width="180">
+        <el-table-column label="订单描述" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.itemDescription }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="开始时间" width="180">
+        <el-table-column label="开始时间" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.start_time }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结束时间" width="180">
+        <el-table-column label="结束时间" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.end_time }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="0px">
-          <template slot-scope="scope">
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">      
+              <el-button size="mini" type="" @click="handleToUserItem(scope.$index, scope.row)">访问</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -52,6 +53,7 @@ export default {
   data() {
     return {
       props: {
+
       },
       tableData: [{
         id: "2221",
@@ -125,7 +127,7 @@ export default {
   },
   mounted(){
       this.getUseHistory();//获取tableData的数据
-      this.getTotalCount();
+      this.getTotalCount();//
   },
   watch:{
     pageNo:{
@@ -144,7 +146,10 @@ export default {
           pageNo:this.pageNo,
           pagesize:this.pagesize,
      }
-      this.$http.post('/api/userHistory/deleteTable',fromData).then(req=>{
+      this.$http.post('/api/userHistory/deleteTable',fromData,{
+  headers:{
+    'Authorization':this.$cookie.get('token'),
+  }}).then(req=>{
         this.tableData.push(req.data);
       })
     },
@@ -162,6 +167,10 @@ export default {
       this.$http.post('/api/userHistory/getTotalCount',{token:this.$cookie.get("token")}).then(req=>{
         this.totalCount=req.data;
       })
+    },
+    handleToUserItem(index){
+      this.$store.commit("setUserId",this.tableData[index].id);
+      this.$router.push("/userItem");
     }
   }
 }
@@ -169,7 +178,7 @@ export default {
 
 <style lang="less" scoped>
 .userHistoryMain {
-  width: 1000px;
+  width: 1200px;
   border: 1px solid #eaeaea;
   margin: auto;
   margin-top: 25px;

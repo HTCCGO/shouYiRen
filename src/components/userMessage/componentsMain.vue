@@ -10,30 +10,15 @@
                 </div>
                 <div class="msg"><span>{{ item.msg }}</span></div>
             </div>
-
         </div>
+
         <div class="text">
-            <div class="icons">
-                <el-button type="text" @click="tupian = true"> <span class="iconfont icon-tupian"></span></el-button>
-                <el-button type="text" @click="zhifu = true"> <span class="iconfont icon-zhifu" @click="getZhiFu()"></span></el-button>
-                <el-button type="text" @click="updata = true"> <span class="iconfont icon-shangchuandaochu"></span></el-button>
-            </div>
-            <textarea v-model="newMessage" @keyup.enter.native="getMessage()"></textarea>
-            <div>
+            <textarea v-model="newMessage"></textarea>
+            <div class="button">
                 <el-button size="small" @click="getMessage()">发送</el-button>
                 <el-button type="danger" size="small">取消</el-button>
             </div>
         </div>
-
-        <el-dialog title="" :visible.sync="updata" direction="rtl" size="30%">
-            <el-upload class="upload-demo" style="margin-left: 170px; margin-bottom: 40px;" drag
-                action="https://jsonplaceholder.typicode.com/posts/" multiple>
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            </el-upload>
-            <el-button type="primary" @click="updata = false" style="margin-left: 140px;">确 认</el-button>
-            <el-button @click="updata = false" style="margin-left: 270px;">取 消</el-button>
-        </el-dialog>
 
     </div>
 </template>
@@ -72,7 +57,6 @@ export default {
     },
     mounted() {
     // 使用this.$store.state.XXX可以直接访问到仓库中的状态
-    this.connectWebSocket(); // 连接WebSocket服务器
   },
   watch: {
     //直接监视useId的值类型
@@ -107,52 +91,14 @@ export default {
                 message:this.newMessage,
             }
             this.$http.post("/api/userMesssage/getNewMessage",fromData).then(req=>{ 
-                this.message=req.data;
+                this.message.push(req.data.data);
+                this.newMessage='';
             });
-        },
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-                .then(_ => {
-                    _
-                    done();
-                })
-                .catch(_ => {
-                    _
-                });
         },
         getZhiFu(){
             //转移到支付界面
             this.$router.push('/pay');
         },
-        connectWebSocket(){
-            //新建一个WebSocket连接
-            this.socket = new WebSocket('ws://localhost:3001/pay');
-            this.socket.addEventListener("open", () => {
-                console.log("WebSocket连接已打开");
-                //连接的时候发送对应的
-                this.socket.send("Hello Server!");
-            });
-             this.socket.addEventListener("message", (event) => {
-                console.log("接收到消息:", event.data);
-                //将新增的data数据新增到数据最后。
-                this.message.push(event.data);
-            });
-            this.socket.addEventListener("error", (error) => {
-                console.log("WebSocket连接出错:", error);
-            });
-        },
-        //关闭socket连接
-        closeWebSocket(){
-            this.socket.addEventListener("close", () => {
-            console.log("WebSocket连接已关闭");
-            this.socket=null;
-            this.$router.push("/home");
-            });
-        },
-        
-    },
-    beforeDestroy(){
-        this.closeWebSocket();
     },
 };
 </script>
@@ -160,18 +106,28 @@ export default {
 <style lang="less" scoped>
 .index {
     border-radius: 15px;
+    border-top-right-radius: 15px;
     width: 800px;
     margin: 20px;
-    box-shadow: 0 0 15px #cac6c6;
+    margin-right: 0px;
+    margin-top: 40px;
+    box-shadow: 0 0 25px #cac6c6;
 }
 
 .main {
+    margin: 0px;
     border: 1px solid #eaeaea;
     border-bottom: none;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    //关闭三个从父元素中继承的属性
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
     max-width: 800px;
-    height: 480px;
+    width: 798px;
+    height: 475px;
+    padding-top: 5px;
     overflow: auto;
     overflow-x: hidden;
 }
@@ -181,32 +137,32 @@ export default {
     border-top: 1px solid #464545;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
-    width: 800px;
+    padding: 0px;
+    width: 798px;
     height: 90px;
 
     textarea {
         border: 0;
         outline: none;
         resize: none;
-        width: 493px;
+        width: 630px;
         height: 75px;
         padding-left: 8px;
         overflow: hidden; //消除滚动条
         font-family: 'Hiragino Sans GB';
         font-size: 18px;
-        position: relative;
-        left: -100px;
     }
 
     div {
         position: relative;
         top: -40px;
-        left: 665px;
+        left: 642px;
     }
 }
 
 /* Add the closing curly brace here */
 .user_1 {
+    width: 300px;
     margin-left: 9px;
     margin-bottom: 7px;
 }
@@ -278,8 +234,9 @@ a {
     text-decoration: none;
 }
 
-.el-button {
-    color: black;
+.button{
+
+    width: 122PX;
 }
 
 .icons {

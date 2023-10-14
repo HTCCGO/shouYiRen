@@ -4,6 +4,7 @@ import router from './router/index.js'
 import elementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
+import Router from 'vue-router'
 // import VueSocketIO from 'vue-socket.io'
 import store from './store/index.js'
 import Cookie from 'js-cookie'
@@ -15,17 +16,17 @@ Vue.prototype.$http = axios;
 //全局注册cookie
 Vue.prototype.$cookie=Cookie;
 Vue.prototype.$md5=md5;
+
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
 // Vue.use(new VueSocketIO({
 //   debug: true,
 //   connection: 'http://localhost:3000', // socket 服务器所在地址
 // }));
-
-//生成一个cookie
-if(document.cookie){
-  console.log(document.cookie);
-}else{
-  Cookie.set("token","1122", { expires: 1440 })
-}
 
 router.beforeEach((to, from, next) => {
   const isLoggedIn = (Cookie.get('token') !==  undefined); // 使用实际的登录状态判断
@@ -35,6 +36,7 @@ router.beforeEach((to, from, next) => {
       next();
   }
 });
+
 new Vue({
   router,
   store,

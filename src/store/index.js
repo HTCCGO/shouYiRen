@@ -17,6 +17,7 @@ const store = new Vuex.Store({
         }],
 
         user:true,//存储用户的数据类型，如果为true,说明是用户，如果为flase，说明是商户
+
         router:"/home",
 
         userId:"123",//对方的id值
@@ -28,8 +29,8 @@ const store = new Vuex.Store({
         }],
 
         ItemId:"",
-        seach_txt:"",
-        seach_card:[],
+        payUserId:"",
+        seach_txt:"",//搜索信息
         userdescription: "",//用户描述
         itemdescription: "",//商品描述
 
@@ -60,8 +61,8 @@ const store = new Vuex.Store({
         setConcatItems(state,items){
             state.userMessageConcatItem=items;
         },
-        getSeachCard(state,seachCard){
-            state.seach_card=seachCard;
+        getSeachCard(state,seach_text){
+            state.seach_txt=seach_text;
         },
         getHomePage(state,page){
             state.page.pageNo=page.pageNo;
@@ -90,6 +91,9 @@ const store = new Vuex.Store({
         },
         setUser(state,user){
             state.user=user;
+        },
+        setUserId(state,userId){
+            state.payUserId=userId;
         }
     },
     actions: {

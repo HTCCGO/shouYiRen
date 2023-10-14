@@ -115,9 +115,11 @@ export default {
     width: 700px;
     height: 100%;
     margin: auto;
+    margin-top: 50px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 15px;
-     box-shadow: 0 0 25px #cac6c6;
+    box-shadow: 0 0 25px #cac6c6;
     padding-top: 35px;
     padding-bottom: 10px;
     padding-left: auto;
@@ -164,6 +166,7 @@ resize:none
     border-radius: 15px;
     box-shadow: 0 0 25px #cac6c6;
     margin-top: 20px;
+    margin-bottom: 30px;
     padding-top: 15px;
     padding-bottom: 20px;
     padding-left: 15px;

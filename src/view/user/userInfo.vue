@@ -2,7 +2,9 @@
     <div>
         <el-container>
             <el-header><componentsHeaderVue/></el-header>
+            <el-container>
             <el-main><componentsMainVue/></el-main>
+        </el-container>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>

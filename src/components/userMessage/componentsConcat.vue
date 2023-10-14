@@ -54,7 +54,9 @@ export default {
 
 <style lang="less" scoped>
 .leftsconcat {
-    margin: 20px;
+    margin-top: 40px;
+    margin-left: 40px;
+    margin-bottom: 30px;
     box-shadow: 5px 0 15px #cac6c6;
     border-radius: 15px;
     border: 1px solid #eaeaea;

@@ -2,7 +2,9 @@
     <div>
         <el-container style="min-height: 100vh;">
             <el-header><componentsHeaderVue/></el-header>
+            <el-container>
             <el-main><componentsUserHistoryVue/></el-main>
+        </el-container>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>

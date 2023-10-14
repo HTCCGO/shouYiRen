@@ -4,7 +4,7 @@
             <el-header>
                 <componentsHeaderVue />
             </el-header>
-            <el-container class="main">
+            <el-container>
                 <el-aside>
                     <componentsUserMessageVue />
                 </el-aside>
@@ -42,22 +42,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-header {
+.el-header{
     padding: 0;
 }
 
-.el-main {
-    padding: 0px;
-    overflow: hidden;
+.el-main{
+padding: 0;
+max-width: 1000px;
+overflow: hidden; //消除滚动条
 }
 
-.el-footer {
+.el-footer{
     padding: 0;
-}
-
-.main {
-    margin-top: 15px;
-    margin-bottom: 20px;
-    margin-left: 70px;
 }
 </style>

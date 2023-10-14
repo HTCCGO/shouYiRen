@@ -8,8 +8,7 @@
                     <div style="padding: 14px;">
                         <span>{{ item.title }}</span>
                         <div class="bottom clearfix">
-                            <!-- <time class="time">{{ currentDate }}</time> -->
-                            <el-button type="primary" class="buttom" size="mini">立即进入</el-button>
+                            <el-button type="primary" class="buttom" size="mini" @click="getItem(item)">立即进入</el-button>
                         </div>
                     </div>
                 </el-card>
@@ -32,7 +31,6 @@
 export default {
     data() {
         return {
-            currentDate: new Date(),
             cardData: [
                 { id: 1, title: 'Card 1', content: 'Content 1', src: '', text: ' 11' },
                 { id: 2, title: 'Card 2', content: 'Content 2', src: '', text: ' 11' },
@@ -53,6 +51,7 @@ export default {
     mounted() {//这部分的函数是在页面的加载之前进行执行的函数
         this.getCount();//获取当前数据的总数
         this.getList();//依照当前的页号和每页的数据量进行查询
+        this.getSeach();//发送查询信息
     },
 
     watch:{
@@ -69,7 +68,7 @@ export default {
     },
     methods: {
         getCount() {
-            this.$http.post('/seach/getCount').then(res => {
+            this.$http.post('/api/seach/getCount').then(res => {
                 this.totalCount = res.data;
             })
         },
@@ -79,10 +78,24 @@ export default {
             fromData.append("pagesize", this.pagesize);
             //将页面完成数据修改后的两个参数改变为键值对的形式，并存储在fromdata中
 
-            this.$http.post("/seach/page", fromData).then(res => {
+            this.$http.post("/api/seach/page", fromData).then(res => {
                 this.userList = res.data;
             })
         },
+        getSeach(){
+            this.$http.post('/api/seach',this.$store.state.seach_txt).then(res =>{
+                this.cardData=res.data.data;
+            }).catch(err=>{
+                console.log(err.message);
+            });
+        },
+        getItem(item){
+            this.$http.post("/api/userItem/addView",item.itemId);
+            //传递ItemId的值
+            this.$store.commit("setItemId",item.itemId);
+            //传到userItem界面
+            this.$router.push("/userItem");
+        }
     },
 
 }

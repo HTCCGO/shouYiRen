@@ -3,8 +3,7 @@
         <div class="MainHeader">
             <el-carousel indicator-position="outside">
                 <el-carousel-item v-for="item in cardHeader" :key="item.id">
-                    <!-- 利用静态的链接来完成 -->
-               <img :src="cardHeader.src" alt="">
+                    <img :src="cardHeader.src" alt="">
                 </el-carousel-item>
             </el-carousel>
         </div>
@@ -12,10 +11,10 @@
         <el-row>
             <el-col :span="6" v-for="item in cardData" :key="item.id">
                 <el-card :body-style="{ padding: '5px' }" shadow="hover">
-                    <img :src="cardData.src"
-                        class="image">
+                    <img :src="cardData.src" class="image">
                     <div style="padding: 14px;">
                         <span>{{ item.title }}</span>
+                        <p>&nbsp; {{ item.totalAmount }}&yen; </p>
                         <div class="bottom clearfix">
                             <!-- <time class="time">{{ currentDate }}</time> -->
                             <el-button type="primary" class="buttom" size="mini" @click="getCard(item)">立即进入</el-button>
@@ -25,14 +24,8 @@
             </el-col>
         </el-row>
         <div class="block">
-            <el-pagination 
-            hide-on-single-page
-             @size-change="handleSizeChange" 
-             @current-change="handleCurrentChange"
-            :current-page="pageNo" :page-sizes="[5, 10, 30, 50]" 
-            :page-size="pagesize"
-            layout="total, sizes, prev, pager, next, jumper" 
-            :total="totalCount">
+            <el-pagination :current-page="pageNo" :page-sizes="[5, 10, 30, 50]" :page-size="pagesize"
+                layout=" prev, pager, next " :total="totalCount">
             </el-pagination>
         </div>
 
@@ -45,10 +38,10 @@ export default {
         return {
             currentDate: new Date(),
             cardData: [
-                { id: 1, title: 'Card 1', itemId: 'Content 1', src: '', text: ' 11' },
-                { id: 2, title: 'Card 2', content: 'Content 2', src: '', text: ' 11' },
-                { id: 3, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
-                { id: 4, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
+                { id: 1, title: 'Card 1', src: '', totalAmount:11,userId:""},
+                { id: 2, title: 'Card 2', src: '',totalAmount:11,userId:"" },
+                { id: 3, title: 'Card 3', src: '', totalAmount:11,userId:""},
+                { id: 4, title: 'Card 3', src: '', totalAmount:11,userId:""},
                 // 添加更多的卡片数据...
             ],
             cardHeader: [
@@ -60,7 +53,7 @@ export default {
             ],
             userList: [],
             pageNo: 1,//默认当前页面为第一页
-            pagesize: 4,//默认当前每页的数据为4条
+            pagesize: 8,//默认当前每页的数据为4条
             totalCount: 0//默认总数为0
         }
     },
@@ -70,51 +63,53 @@ export default {
         this.getList();//依照当前的页号和每页的数据量进行查询
         this.getHeader();//返回header的数据
     },
-    watch:{
-        pageNo:{
-            handler(){
-                let fromData={
-                    pageNo:this.pageNo,
-                    pageSize:this.pageSize,
-                }
-                this.$http.post('/api/seach/page',fromData).then(function(response){
-                    this.cardData=response.data;
-                })
-            }
+    watch: {
+        pageNo: {
+            handler() {
+                this.getList();
+            },
         }
     },
-    destroyed: function () {
-    console.log("我已经离开了！");
-        this.stopTimer();
-},
     methods: {
         getCount() {
-            this.$http.post('/getCount').then(res => {
-                this.totalCount = res.data;
+            this.$http.post('/api/seach/getCount',{ }, {
+                headers: {
+                    'Content-Type':'application/x-www-form-urlencoded',
+                    'Authorization': this.$cookie.get('token')
+                }
+            }).then(res => {
+                console.log(this.$cookie.get('token'));
+                console.log(res);
+                this.totalCount = res.data.data; 
+            }).catch(err => {  
+                console.log(err);
             })
         },
         getList() {
-            let fromData = new FormData();//一个web Api用于创建和处理包含表单数据的对象。它提供了一种方便的方式来捕获表单中的用户输入，并以键值对的形式进行处理
-            fromData.append("pageNo", this.pageNo);
-            fromData.append("pagesize", this.pagesize);
+            let fromData = {
+                pageNo: this.pageNo,
+                pageSize: this.pagesize,
+            }
             //将页面完成数据修改后的两个参数改变为键值对的形式，并存储在fromdata中
-
-            this.$http.post("/getUserList", fromData).then(res => {
-                this.userList = res.data;
+            this.$http.post("/api/seach/page", fromData).then(res => {
+                this.userList = res.data.data;
             })
         },
-        getHeader(){
-            this.$http.post('/api/seach/getHeader').then(response=>{
-                this.cardHeader=response.data;
+        getHeader() {
+            this.$http.post('/api/seach/getHeader').then(response => {
+                this.cardHeader = response.data.data;
             })
-        },
+        }, 
+        getCard(item) {
+            this.$http.post("/api/userItem/addView",item.itemId);
+        //将值存储在vuex中，以便在其他的组件中使用
+        this.$store.commit('setItemId', item.itemId);
+        
+        //转移到新的页面
+        this.$router.push('/userItem');
     },
-    getCard(item){
-            //将值存储在vuex中，以便在其他的组件中使用
-            this.$store.commit('setItemId',item.itemId);
-            //转移到新的页面
-            this.$router.push('/userItem');
     },
+   
 }
 </script>
 

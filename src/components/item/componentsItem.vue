@@ -18,15 +18,14 @@
             </div>
 
             <div class="itemDescription">
-                <p>{{ itemdescription }}</p>
+                <p  align="left">{{ itemdescription }}</p>
             </div>
-            <div class="button" @click="getMessage">
-                <a href="">
-                    <div>
-                        <span style=" ">立即沟通</span>
+                    <div style="margin-top: 15px;">
+                        <el-button  @click="getUserItem()" class="now" type="primary">立即沟通</el-button>
                     </div>
-                </a>
-            </div>
+                    <div>
+                        <el-button @click="getPay()" class="buy" type="primary">立即购买</el-button>
+                    </div>
         </div>
 
     </div>
@@ -36,8 +35,8 @@
 export default {
     data() {
         return {
-            userdescription: "",
-            itemdescription: "",
+            userdescription: "ZZZZZAASAS",
+            itemdescription: "ASDFDASDAS",
             userImg:"",
             item:[
                 {id:1,src:""},
@@ -52,20 +51,28 @@ export default {
         this.getData();
     },
     methods: {
-        //TODO完成一个两方进行相互交流的页面
+
         getMessage() {
             this.$router.push('')
         },
         getData(){
             const Id={
                 itemId:this.$store.state.ItemId,
-                userId:this.$store.state.userId,
             }
-            this.$http.post("/userItem/getData",Id).then(req=>{
+            this.$http.post("/api/userItem/getData",Id).then(req=>{
                 this.userdescription=req.data.data.userdescription;
                 this.itemdescription=req.data.data.itemdescription;
-            });
-        }
+            }).catch(err=>{
+                console.log(err);
+            })
+        },
+        getUserItem(){
+            //转移到userMessage页面
+            this.$router.push ('/userMessage');
+        },
+        getPay(){
+            this.$router.push('/pay');
+        },
     }
 }
 </script>
@@ -122,13 +129,6 @@ export default {
     border-radius: 7px;
 }
 
-a {
-    text-decoration: none;
-    color: white;
-}
-a:hover{
-    color: black;
-}
 
 .button {
     height: 40px;
@@ -138,12 +138,24 @@ a:hover{
     margin-top: 8px;
     border-radius: 10px;
 }
-span{
-    position: relative;
-    top: 8px;
-    left: 22px;
-}
+
 .carousel{
     margin-bottom: 10px;
+}
+.now{
+    float: left;
+    margin-left: 200px;
+}
+
+.buy{
+margin-left: 200px;
+}
+
+p{
+    float: left;
+    margin-top: 4px;
+    margin-left: 5px;
+    font-family:  "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-size: 17px;
 }
 </style>

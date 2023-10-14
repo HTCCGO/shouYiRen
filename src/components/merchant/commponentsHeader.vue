@@ -40,7 +40,7 @@ export default {
         },
         quitUser(){
             this.$cookie.remove("token");
-            this.$router.push('/login')
+            this.$router.push('/login');
         },
         resetUserInfo(){
             this.$router.push('/merchant/resetUserInfo');
@@ -49,7 +49,7 @@ export default {
             this.$router.push('/home');
         },
         upDataNewItem(){
-            this.$router.push('/upDataNewItem');
+            this.$router.push('/upDataItem');
         },
         toSearch(){
             let fromData={

@@ -3,7 +3,6 @@
         <el-container>
             <el-header><componentsHeaderVue/></el-header>
             <el-container>
-                <el-aside width="200px"><componentsAsideVue/></el-aside>
                 <el-main><componentsMainVue/></el-main>
                 <el-footer><componentsFooterVue/></el-footer>
             </el-container>
@@ -14,7 +13,6 @@
 <script>
 import componentsFooterVue from '../components/componentsFooter.vue'
 import componentsHeaderVue from '../components/componentsHeader.vue'
-import componentsAsideVue from '../components/userinfo/componentsAside.vue'
 
 export default{
     data(){
@@ -23,7 +21,6 @@ export default{
     components:{
         componentsFooterVue,
         componentsHeaderVue,
-        componentsAsideVue,
 
     }
 }

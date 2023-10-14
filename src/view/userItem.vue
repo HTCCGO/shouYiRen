@@ -30,4 +30,8 @@ export default{
 .componentsItemVue{
     margin-top: 20px;
 }
+
+.el-footer{
+    padding: 0;
+}
 </style>

@@ -2,7 +2,9 @@
     <div>
         <el-container>
             <el-header><componentsHeaderVue :is="header" /></el-header>
+            <el-container>
             <el-main><componentsMainVue/></el-main>
+          </el-container>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>
@@ -27,6 +29,7 @@ export default {
   computed: {
     header() {
     const user=this.$store.state.user;
+    console.log(this.$store.state.user);
      if(user){
         return "componentsHeaderVue";
      }else{

@@ -24,8 +24,8 @@ import merchantUserHistory from '../view/merchant/merchantUserHistory.vue'
 import merchantUserMessage from '../view/merchant/merchantUsermessage.vue'
 import merchantResetUserInfo from '../view/merchant/merchantResetUserInfo.vue'
 
-//demo
-import demo from '../components/userinfo/componentsResetUser.vue'
+import demo from '../view/demo.vue'
+
 Vue.use(vueRouter);
 
 const routes = [

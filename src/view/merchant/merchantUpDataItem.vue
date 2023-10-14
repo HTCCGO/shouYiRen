@@ -6,12 +6,12 @@
                     <el-input v-model="form.username" style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="物品图片">
-                    <el-upload class="upload-demo" action="http://localhost:3000/post" :on-preview="handlePreview"
-                        :on-remove="handleRemove" multiple :limit="5" :on-exceed="handleExceed" :on-error="handleError"
-                        :on-success="handleSucces" :before-upload="beforeUpload" :file-list="fileList"
-                        style="width: 200px;">
-                        <el-button size="mini" type="primary">点击上传</el-button>
-                        <span slot="tip" class="el-upload__tip">只能上传jpg文件,且不超过2MB</span>
+                    <el-upload class="upload-demo" ref="upload" action="http://localhost:3000/post"   :on-exceed="handleExceed" drag
+                        :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="true" :limit=5
+                        :before-upload="beforeUpload" :on-success="handleSucces" :on-error="handleError" multiple >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且大小不超过2mb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="联系号码">
@@ -71,13 +71,16 @@ export default {
             form: {
                 username: '',
                 phoneNumber: "",
-                totalAmount:0,
+                totalAmount: "",
                 address: "",
                 type: [],
                 desc: '',
                 data1: "",
                 daata2: "",
                 time: [],
+                headerObj: {
+                   'Content-Type':'multipart/form-data',
+                          },
             }
         }
     },
@@ -87,18 +90,18 @@ export default {
                 username: this.form.username,
                 phoneNumber: this.form.phoneNumber,
                 //将价格转化为分后进行传输
-                totalAmount:(this.form.totalAmount)*100,
+                totalAmount: (this.form.totalAmount) * 100,
                 adress: this.form.adress,
                 type: this.form.type,
                 desc: this.form.desc,
-                data1:this.form.data1,
-                data2:this.form.data2,
-                fileList:this.fileList,
+                data1: this.form.data1,
+                data2: this.form.data2,
+                fileList: this.fileList,
             };
             this.$http.post("/api/post/upDataItem", formData).then(req => {
                 if (req.data.data.code !== 200) {
                     //转到成功页面
-                    this.$router.push('/success');
+                    this.$router.push('/succes');
                 } else {
                     //转到失败页面
                     this.$router.push('/error');
@@ -117,8 +120,10 @@ export default {
 
         //文件列表移除文件时的钩子
         handleRemove(file, fileList) {
-            file;
-            fileList;
+            if(file.type === 'image/jpeg' ){
+                fileList;
+                this.$message.success(`${file.name}移除成功`);
+            }
         },
 
         //点击文件列表中已上传的文件时的钩子
@@ -126,22 +131,23 @@ export default {
             console.log(file);
         },
         handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${fileList.length} 个文件`);
         },
         handleError(file) {
             console.log(file);
             this.$message.warning(`${file.name}上传失败`);
         },
         handleSucces(response, file) {
-            this.$message.success(`${file.name}上传成功`);
-            //修改fileList的数值
-            const data={
-                name:file.name,
-                url:response,
-            };
-            this.fileList.push(data);
+            console.log(response);
+            if(response.message === "success"){
+                this.$message.success(`${file.name}上传成功`);
+                //将数据同步到data中
+                this.fileList.push(response.data);
+            }else{
+                this.$message.error(`${file.name}上传失败`);
+            }
         },
-        
+
         beforeUpload(file) {
             //判断文件类型是否为jpg
             const isJPG = file.type === 'image/jpeg';
@@ -149,14 +155,60 @@ export default {
             const isLt2M = file.size / 1024 / 1024 < 2;
 
             if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+                this.$message.error('上传的图片只能是 JPG 格式!');
             }
             if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传的图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
+        },
+        getUserItem(file) {
+            console.log(file.file);
+            const fromData = {
+                file: file,
+            }
+            this.$http.post("/api/post", fromData).then(res => {
+                res;
+                console.log(res);
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        async submitUpload() {
+          
+              this.$refs.upload.submit();
+            // await new Promise(resolve => setTimeout(resolve, 2000));
+            // console.log(this.$refs.upload.fileList);
+            // const formData = new FormData();
+            // this.$refs.upload.fileList.forEach(file => {
+            //     // 将每个文件添加到 FormData
+            //     formData.append('file', file.raw);
+            // });
+        },
+        async getRequest(files){
+            files;
+            await new Promise(resolve => {
+        this.$refs.upload.submit();
+        this.$refs.upload.$on('success', resolve);
+        this.$refs.upload.$on('error', resolve);
+    });
+        //     const formData = new FormData();
+        //      formData.append('files',files); 
+        //   await  this.$http.post('/api/post',formData,{
+        //     header:{
+        //         'Content-Type':'multipart/form-data',
+        //     }
+        //   }).then(res=>{
+        //     res;
+        //     console.log("AAA");
+        //   }).catch(err=>{
+        //     err;
+        //     console.log("BBB");
+        //     console.log("ERR_:"+err);
+        //   })
         }
     }
+
 }
 </script>
 
@@ -216,12 +268,21 @@ textarea {
 
 .upload-demo {
     height: 100%;
-    width: 340px;
+    width: 300px;
     margin-bottom: 10px;
 
     span {
         display: inline-block;
         margin-left: 8px;
     }
+}
+el-upload{
+    width: 300px;
+}
+/deep/ .el-upload{
+  width: 100%;
+}
+/deep/ .el-upload .el-upload-dragger{
+  width: 300px;
 }
 </style>

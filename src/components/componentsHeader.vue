@@ -29,7 +29,7 @@ export default {
     }, 
     methods: {
         getUserInfo() {
-            this.$router.push('userInfo')
+            this.$router.push('/userInfo')
         },
         getUserMessage(){
             this.$router.push('/userMessage');
@@ -39,7 +39,7 @@ export default {
         },
         quitUser(){
             this.$cookie.remove("token");
-            this.$router.push('/login')
+            this.$router.push('/login');
         },
         resetUserInfo(){
             this.$router.push('/resetUserInfo');
@@ -48,16 +48,11 @@ export default {
             this.$router.push('/home');
         },
         toSearch(){
-            let fromData={
-                seach_txt:this.seach_txt,
-            };
-            //上传搜索信息
-            this.$http.post('/api/seach',fromData).then(response=>{
-                this.$store.commit("getSeachCard",response.data);
-                console.log(response);
-                //当值成功获取之后才开始转
-                this.$router.push('/seach');
-            })
+      
+            //传入搜索信息
+            this.$store.commit("getSeachCard",this.seach_txt);
+            //当值成功获取之后才开始转
+             this.$router.push('/seach');
         }
     },
 };
