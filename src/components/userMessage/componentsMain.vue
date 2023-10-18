@@ -26,81 +26,84 @@
 
 <script>    
 export default {
-    data() {
-        return {
-            updata: false,
-            direction: 'rtl',
-            newMessage: "",
-            userId:"123",//对方的Id值
-            socket:null,
-            message: [{
-                sender: 1,
-                msg: "aaa",
-            }, {
-                sender: 2,
-                msg: 'aaa',
-            }, {
-                sender: 1,
-                msg: 'AAA',
-            }, {
-                sender: 2,
-                msg: 'aaa',
-            }, {
-                sender: 1,
-                msg: "aaa",
-            }, {
-                sender: 2,
-                msg: 'aaa',
-            }
-            ],
-        }
-    },
-    mounted() {
-    // 使用this.$store.state.XXX可以直接访问到仓库中的状态
-  },
-  watch: {
-    //直接监视useId的值类型
-    "$store.state.userId": {   
-           //eslint-disable-next-line 
-        handler(newMessage,old){
-            this.userId= this.$store.state.userId;
-            console.log( this.userId);
-        },
-        deep: true,
-        Immediate :true,
-    },
-    //userId是对面的一个值
-    userId:{
-        handler(){
-            const fromData={
-                userId:this.$store.state.userId,//对方的Id值
-                token:this.$cookie.get("token"),//我方的Id值
-            }
-            this.$http.post("/api/userMesssage/watchUserId",fromData).then(req=>{
-                this.message=req.data;
-            })
-        }
+  data() {
+    return {
+      updata: false,
+      direction: 'rtl',
+      newMessage: "",
+      userId: "123", // 对方的Id值
+      socket: null,
+      message: [],
     }
   },
- 
-    methods: {
-        getMessage(){
-            const fromData={
-                token:this.$cookie.get("token"),//我方的Id值
-                userId:this.userId,//对方的Id值
-                message:this.newMessage,
-            }
-            this.$http.post("/api/userMesssage/getNewMessage",fromData).then(req=>{ 
-                this.message.push(req.data.data);
-                this.newMessage='';
-            });
-        },
-        getZhiFu(){
-            //转移到支付界面
-            this.$router.push('/pay');
-        },
+  mounted() {
+    // 使用this.\$store.state.XXX可以直接访问到仓库中的状态
+    this.getNewMessageMain();
+  },
+  watch: {
+    // 监视$store.state.userId的值
+    "$store.state.userId": {
+      handler(newUserId) {
+        this.userId = newUserId;
+        const fromData={
+            userId:this.$$cookie.get('token'),
+            userId_:this.userId,
+        }
+        this.$http.post('/api/userMesssage/watchUserId',fromData).then(results=>{
+           this. message=results.data.data;
+        }).catch(err=>{
+            console.log(err);
+        })
+        console.log(this.userId);
+      },
+      deep: true,
+      immediate: true,
     },
+  },
+  methods: {
+    createWebSocketConnection() {
+      const socketUrl = "ws://localhost:3001/websocket/";
+      this.socket = new WebSocket(socketUrl);
+
+      this.socket.onopen = () => {
+        console.log("WebSocket connection established");
+      };
+
+      this.socket.onmessage = (event) => {
+        console.log("Received message:", event.data);
+      };
+
+      this.socket.onclose = () => {
+        console.log("WebSocket connection closed");
+      };
+
+      this.socket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+    },
+    getMessage() {
+      const fromData = {
+        token: this.$cookie.get("token"), // 我方的Id值
+        userId: this.userId, // 对方的Id值
+        message: this.newMessage,
+      };
+      this.$http.post("/api/userMesssage/getNewMessage", fromData).then(() => {
+        //将消息挂载到消息中
+        this.message.push(this.newMessage);
+        this.newMessage = '';
+      });
+    },
+    getZhiFu() {
+      // 转移到支付界面
+      this.$router.push('/pay');
+    },
+    getNewMessageMain() {
+     this.createWebSocketConnection();
+    },
+   
+  },
 };
+
 </script>
 
 <style lang="less" scoped>

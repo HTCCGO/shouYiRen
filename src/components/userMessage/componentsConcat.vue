@@ -2,7 +2,7 @@
     <div>
         <div class="leftsconcat">
             <div class="concat" v-for="item in items" :key="item.index"  >
-                <p>{{ item.message }}</p><br>
+                <p>{{ item.concatMessage }}</p><br>
                 <span>来自于:</span>
                 <span class="username" @click="getUserName(item.userId)">{{ item.username }}</span>
             </div>
@@ -44,8 +44,8 @@ export default {
                 },
                 //向服务器进行请求，来获取所有有关的信息
                 getItems(){
-                    this.$http.post('/api/userMessage/Concat',this.$cookie.get("token")).then(req=>{
-                        this.items=req.data;
+                    this.$http.post('/api/userMessage/Concat',{token:this.$cookie.get("token")}).then(req=>{
+                        this.items=req.data.data;
                     });
                 }
             },
