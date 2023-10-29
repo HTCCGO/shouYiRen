@@ -2,7 +2,7 @@
     <div class="forget_password">
         <h3 class="login_title">忘记密码</h3>
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="手机号码 :" prop="phoneNumber">
+            <el-form-item label="手机号码 :" prop="phoneNumber" style="width: 341px;">
                 <el-input type="text" v-model="ruleForm.phoneNumber" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="验证码 :" prop="checkPhoneNumber">
@@ -15,6 +15,7 @@
         </el-form>
     </div>
 </template>
+
 
 <script>
 export default {
@@ -96,11 +97,12 @@ export default {
                     }
                     this.$http.post('/api/login/forgetPassword', fromData).then( (response)=> {
                         //比较后端发回的code值,两者之间的值为一个对应的数值
-                       
+                       console.log(response.data.data);
                         if (response.data.data) {
                             //传到下一页面并且将电话号码放在vuex中
-                            this.$router.push('/forgetPassword_');
-                            this.$store.commit('getPhoneNumber', this.ruleForm.phoneNumber);
+                         
+                            this.$store.commit('getPhoneNumber', this.ruleForm.phoneNumber);  
+                             this.$router.push('/forgetPassword_');
                         } else {
                             //noCheckPhoneNumber的值，说明两者之间并未对应
                             this.noCheckPhoneNumber = 1;
@@ -165,6 +167,11 @@ h3{
         position: relative;
         top: -20px;
         left: 150px;
+}
+.el-form{
+    padding-bottom: 0px;
+    padding-right: 0px;
+    padding-left: 15px;
 }
 </style>
 

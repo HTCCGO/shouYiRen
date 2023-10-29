@@ -29,13 +29,14 @@ import demo from '../view/demo.vue'
 Vue.use(vueRouter);
 
 const routes = [
-    { path: '/home', component: home },
+    { path: '/home', component: home},
+    {path: '/',redirect: '/home'},
 
-    { path: '/login', component: Login },
-    { path: '/person', component: personalCenter },
-    { path: '/registeLogin', component: registerLogin },
-    { path: '/forgetPassword', component: forgetPassword },
-    { path: '/forgetPassword_', component: forgetPassword_ },
+    { path: '/login', component: Login,  meta: { interceptor: 'interceptor' }},
+    { path: '/person', component: personalCenter ,  meta: { interceptor: 'interceptor' }},
+    { path: '/registeLogin', component: registerLogin ,  meta: { interceptor: 'interceptor' }},
+    { path: '/forgetPassword', component: forgetPassword ,  meta: { interceptor: 'interceptor'}},
+    { path: '/forgetPassword_', component: forgetPassword_  , meta: { interceptor: 'interceptor'}},
 
     { path: '/userInfo', component: userInfo },
      { path: '/userMessage', component: userMessage },
@@ -57,7 +58,7 @@ const routes = [
     { path: '/merchant/userInfo', component: merchantUserInfo },
     { path: '/merchant/UserHistory', component: merchantUserHistory },
     { path: '/merchant/UserMessage', component: merchantUserMessage },
-    { path: '//merchant/resetUser', component: merchantResetUserInfo },
+    { path: '//merchant/resetUserInfo', component: merchantResetUserInfo },
 ]
 
 const router = new vueRouter({

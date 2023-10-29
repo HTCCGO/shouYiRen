@@ -4,7 +4,7 @@
       <el-table :data="tableData" style="width: 900px; margin: auto">
         <el-table-column label="编号" width="120">
           <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
+            <span>{{ scope.row.itemId }}</span>
           </template>
         </el-table-column>
         <el-table-column label="用户姓名" width="130">
@@ -171,9 +171,12 @@ export default {
           headers: { Authorization: this.$cookie.get("token") },
         })
         .then(() => {
+          this.$message.success("删除成功");
           this.getUseHistory();
           this.getTotalCount();
-        });
+        }).catch(()=>{
+          this.$$message.error('删除失败');
+        })
     },
     getUseHistory() {
       const fromData = {
@@ -198,7 +201,8 @@ export default {
           token: this.$cookie.get("token"),
         })
         .then((req) => {
-          this.totalCount = req.data;
+          console.log(req.data.data);
+          this.totalCount = req.data.data;
         });
     },
     handleToUserItem(index) {

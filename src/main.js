@@ -10,9 +10,28 @@ import store from './store/index.js'
 import Cookie from 'js-cookie'
 import md5 from 'js-md5'
 
+// axios.post('/api/token',)
+const http=axios.create({
+  timeout: 10000*6,
+});
+
+http.interceptors.request.use(function(request){
+  const currentRoute=router.currentRoute;
+  const interceptor=currentRoute.meta.interceptor;
+
+  if(interceptor !== 'interceptorl'){
+    request.data={
+      ...request.data,
+      token:Cookie.get("token"),
+    };
+  }
+  return request;
+});
+
 Vue.config.productionTip = false
 Vue.use(elementUi);
-Vue.prototype.$http = axios;
+Vue.prototype.$http = http;
+
 //全局注册cookie
 Vue.prototype.$cookie=Cookie;
 Vue.prototype.$md5=md5;
@@ -23,14 +42,9 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   connection: 'http://localhost:3000', // socket 服务器所在地址
-// }));
-
 router.beforeEach((to, from, next) => {
   const isLoggedIn = (Cookie.get('token') !==  undefined); // 使用实际的登录状态判断
-  if (to.path !== '/login' && !isLoggedIn && to.path !=='/registeLogin' && to.path !=="/forgetPassword") {
+  if (to.path !== '/login' && !isLoggedIn && to.path !=='/registeLogin' && to.path !=="/forgetPassword" && to.path !=="/forgetPassword_") {
       next('/login');
   } else {
       next();

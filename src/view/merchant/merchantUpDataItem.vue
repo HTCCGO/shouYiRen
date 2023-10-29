@@ -2,10 +2,10 @@
     <div>
         <div class="Main">
             <el-form ref="form" :model="form" label-width="80px" enctype="multipart/form-data">
-                <el-form-item label="物品名称">
-                    <el-input v-model="form.username" style="width:200px"></el-input>
+                <el-form-item label="物品名称"  style="width: 300px;">
+                    <el-input v-model="form.username" style="width:300px"></el-input>
                 </el-form-item>
-                <el-form-item label="物品图片">
+                <el-form-item label="物品图片"  style="width: 300px;">
                     <el-upload class="upload-demo" ref="upload" action="http://localhost:3000/post"   :on-exceed="handleExceed" drag
                         :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="true" :limit=5
                         :before-upload="beforeUpload" :on-success="handleSucces" :on-error="handleError" multiple >
@@ -14,28 +14,31 @@
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且大小不超过2mb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="联系号码">
-                    <el-input v-model="form.phoneNumber" style="width: 200px;"></el-input>
+                <el-form-item label="联系号码" style="width: 300px;">
+                    <el-input v-model="form.phoneNumber" style="width: 300px;"></el-input>
                 </el-form-item>
-                <el-form-item label="物品价格">
-                    <el-input v-model="form.totalAmount" style="width: 200px;"></el-input>
+                <el-form-item label="物品价格"  style="width: 300px;">
+                    <el-input v-model="form.totalAmount" style="width: 300px;"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间">
-                    <el-date-picker v-model="form.data1" type="date" placeholder="选择日期" style="width: 200px;">
+                    <el-date-picker v-model="form.data1" type="date" placeholder="选择日期" style="width: 300px;">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="结束时间">
-                    <el-date-picker v-model="form.data2" type="date" placeholder="选择日期" style="width: 200px;">
+                    <el-date-picker v-model="form.data2" type="date" placeholder="选择日期" style="width: 300px;">
                     </el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="发货地区">
-                    <el-select v-model="form.address" placeholder="请选择发货地区" style="width: 200px;">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                <el-form-item label="发货地区"  style="width: 300px;">
+                    <el-select v-model="form.address" placeholder="请选择发货地区" style="width: 300px;">
+                        <el-option label="西部地区" value="shanghai"></el-option>
+                        <el-option label="中部地区" value="beijing"></el-option>
+                        <el-option label="东部地区" value="shanghai"></el-option>
+                        <el-option label="南部地区" value="beijing"></el-option>
+                        <el-option label="北部地区" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="物品标签">
+                <el-form-item label="物品标签" style="width: 300px;">
                     <el-checkbox-group v-model="form.type" style="width: 300px;">
                         <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
                         <el-checkbox label="地推活动" name="type"></el-checkbox>
@@ -43,11 +46,11 @@
                         <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="物品简介">
-                    <el-input type="textarea" v-model="form.desc" style="width: 250px;" class="text"></el-input>
+                <el-form-item label="物品简介"  style="width: 300px;">
+                    <el-input type="textarea" v-model="form.desc" style="width: 300px;" class="text"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit()" class="">发布</el-button>
+                    <el-button type="primary" @click="onSubmit()" class="button">发布</el-button>
                     <el-button @click="black()">取消</el-button>
                 </el-form-item>
             </el-form>
@@ -81,6 +84,13 @@ export default {
                 headerObj: {
                    'Content-Type':'multipart/form-data',
                           },
+            }
+        }
+    },
+    watch:{
+        'fileList':{
+            handler(){
+                console.log(this.fileList);
             }
         }
     },
@@ -175,15 +185,7 @@ export default {
             });
         },
         async submitUpload() {
-          
               this.$refs.upload.submit();
-            // await new Promise(resolve => setTimeout(resolve, 2000));
-            // console.log(this.$refs.upload.fileList);
-            // const formData = new FormData();
-            // this.$refs.upload.fileList.forEach(file => {
-            //     // 将每个文件添加到 FormData
-            //     formData.append('file', file.raw);
-            // });
         },
         async getRequest(files){
             files;
@@ -192,20 +194,6 @@ export default {
         this.$refs.upload.$on('success', resolve);
         this.$refs.upload.$on('error', resolve);
     });
-        //     const formData = new FormData();
-        //      formData.append('files',files); 
-        //   await  this.$http.post('/api/post',formData,{
-        //     header:{
-        //         'Content-Type':'multipart/form-data',
-        //     }
-        //   }).then(res=>{
-        //     res;
-        //     console.log("AAA");
-        //   }).catch(err=>{
-        //     err;
-        //     console.log("BBB");
-        //     console.log("ERR_:"+err);
-        //   })
         }
     }
 
@@ -221,9 +209,9 @@ export default {
     border: 1px solid #ccc;
     border-radius: 15px;
     box-shadow: 0 0 25px #cac6c6;
-    padding-top: 50px;
+    padding-top: 90px;
     padding-bottom: 40px;
-    padding-left: 150px;
+    padding-left: 100px;
     padding-right: auto;
 }
 
@@ -278,6 +266,13 @@ textarea {
 }
 el-upload{
     width: 300px;
+}
+.el-form{
+    padding: 0;
+}
+.button{
+    margin-left: 10px;
+    margin-right: 100px;
 }
 /deep/ .el-upload{
   width: 100%;

@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import cookies from "js-cookie"
 export default {
     name: 'my-register',
     data() {
@@ -52,10 +51,8 @@ export default {
                 //将token的值赋值给cookies
                 if(response.data.code === 10000){
                        this.$cookie.set("token", response.data.data.token);
-                       cookies;
                        //修改user的值
                        this.$store.commit("setUser",response.data.data.user);
-                       console.log(response.data.data.user);
                        this.$router.push('/home');
                 }else if(response.data.code === 200){
                     this.$message.error("用户名或密码错误");

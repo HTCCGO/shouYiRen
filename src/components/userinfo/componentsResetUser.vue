@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="Main">
-            <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="用户名">
+            <el-form ref="form" :model="form" label-width="200px">
+                <el-form-item label="用户名" style="width:200px">
                     <el-input v-model="form.username" style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="头像">
@@ -11,20 +11,23 @@
                          action="http://localhost:3000/post/resetUser"
                          :on-success="handleAvatarSuccess"
                          :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar" style=" width: 158px;height: 178px;">
                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                 </el-form-item>
                 <el-form-item label="电话号码">
                     <el-input v-model="form.phoneNumber" style="width: 200px;"></el-input>
                 </el-form-item>
-                <el-form-item label="注册地点">
+                <el-form-item label="注册地点" style="width:500px">
                     <el-select v-model="form.adress" placeholder="请选择注册地点">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                        <el-option label="西部地区" value="shanghai"></el-option>
+                        <el-option label="中部地区" value="beijing"></el-option>
+                        <el-option label="东部地区" value="shanghai"></el-option>
+                        <el-option label="南部地区" value="beijing"></el-option>
+                        <el-option label="北部地区" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="个人标签">
+                <el-form-item label="个人标签" style="width:500px">
                     <el-checkbox-group v-model="form.type">
                         <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
                         <el-checkbox label="地推活动" name="type"></el-checkbox>
@@ -32,19 +35,21 @@
                         <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="个人简介">
-                    <el-input type="textarea" v-model="form.desc" style="width: 400px;" class="text"></el-input>
+                <el-form-item label="个人简介" style="width:200px">
+                    <el-input type="textarea" v-model="form.desc" style="width: 300px;" class="text"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="setUser()" class="">修改</el-button>
-                    <el-button>取消</el-button>
+                    <el-button type="primary" @click="setUser()" class="xiugai">修改</el-button>
+                    <el-button class="quxiao">取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div class="Botton">
+        <div class="Botton"
+        v-if="user">
             <p>注册成为一名手艺人?</p>
             <el-button type="primary" @click="signIn()" class="'button'">立即注册</el-button>
         </div>
+        <div v-else></div>
     </div>
 </template>
 
@@ -59,11 +64,12 @@ export default {
           adress:"",
           type: [],
           desc: ''
-        }
+        },
+        user:this.$store.state.user,
       }
     },
     methods: {
-      onSubmit() {
+      setUser() {
         const formData={
           username: this.form.username,
           phoneNumber: this.form.phoneNumber,
@@ -75,6 +81,7 @@ export default {
           if(req.data.data.code !== 200){
             //转到成功页面
                 this.$router.push('/success');
+                this.$store.state.user
           }else{
             //转到失败页面
               this.$router.push('/error');
@@ -180,5 +187,10 @@ resize:none
         text-align: center;
         font-size: 15px;
     }
+}
+
+.xiugai{
+  margin-left: 20px;
+  margin-right: 58px;
 }
 </style>

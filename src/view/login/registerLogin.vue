@@ -176,21 +176,21 @@ export default {
   border-radius: 15px;
 
   .checkPhoneNumber {
-    width: 340px;
+    width: 273px;
   }
 
 }
 
 .ti_jiao {
   position: relative;
-  top: -20px;
-  left: 110px;
+  top: -21px;
+  left: 85px;
 }
 
 .cpn_button {
   position: relative;
-  top: -61px;
-  left: 340px;
+  top: -62px;
+  left: 273px;
 }
 h3{
         font-size: 20px;
@@ -198,5 +198,8 @@ h3{
         position: relative;
         top: -15px;
         left: 230px;
+}
+.el-form{
+  padding-bottom: 0px;
 }
 </style>

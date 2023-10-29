@@ -82,8 +82,8 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEditTure(scope.$index)"
-              v-if="tableData.isEditBf"
+              @click="handleEditTure(scope.$index,scope.row)"
+              v-if="tableData[scope.$index].isEditBf"
               >编辑</el-button
             >
             <el-button
@@ -134,16 +134,16 @@ export default {
         ],
         workAddress: "江苏省苏州市吴中区吴中大道 1188 号",
       },
-      pageNo: 7, //默认当前页面为第一页
+      pageNo: 5, //默认当前页面为第一页
       pagesize: 5, //默认当前每页的数据为4条
       totalCount: null, //默认总数为0
       deleteApiNumber: 0,
-      pageNumber: null,
+      pageNumber: 1,
       currentPage:1,
     };
   },
   mounted() {
-    this.getTableData(1); //获取tableData的数据
+    this.getTableData(this.pageNumber); //获取tableData的数据
     this.getUser();
     this.getTotalCount();
   },
@@ -156,41 +156,50 @@ export default {
   methods: {
     handleDelete(index) {
       //删除选中的数据
-      this.tableData.splice(index, 1);
+
       //将对应的pageNo发送给后端服务器。
       const fromData = {
-        userId:this.tableData.userId,
-        itemId:this.tableData.itemId,
+        userId:this.tableData[index].userId,
+        itemId:this.tableData[index].itemId,
       };
       this.$http.post("/api/userInfo/deleteTableData", fromData).then(()=> {
         this.handleCurrentChange(this.pageNumber);
-      });
+        this.$message.success("删除成功");
+      }).catch(()=>{
+        this.$message.error("删除失败");
+      })
       this.deleteApiNumber++;
     },
     handleEditTure(index,row) {
+      console.log(index);
       //设置为input可见
+      console.log( row);
+      // row.isEditBf = !row.isEditBf;
       this.tableData[index].isEdit = !this.tableData[index].isEdit;
       this.tableData[index].isEditBf = !this.tableData[index].isEditBf;
-      row;
+   
     },
 
     handleEditFalse(index, row) {
+      console.log(index);
+      row.isEditBf =!row.isEdit;
+      console.log(row);
       this.tableData[index].isEdit = !this.tableData[index].isEdit;
       this.tableData[index].isEditBf = !this.tableData[index].isEditBf;
       this.tableData[index] = row;
       const fromData = row;
       //发送修改服务器的地址到后端去
-      this.$http.post("/api/userIndo/getTableData", fromData);
+      this.$http.post("/api/userInfo/getTableData", fromData);
     },
-
     handleCurrentChange(pageNumber){
       this.pageNumber = pageNumber;
-      this.getTableData(pageNumber);
+      this.getTableData(this.pageNumber);
+      this.getTotalCount();
     },
 
     getTableData(PageNumber) {
       const fromData = {
-        token: this.$cookie.get("token"),
+        pageSize: this.pagesize,
         pageNo: PageNumber,
       };
 

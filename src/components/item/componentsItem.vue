@@ -11,7 +11,8 @@
                 <div class="block">
                     <el-carousel height="250px">
                         <el-carousel-item v-for="item in 4" :key="item">
-                           <img :src="item.src">
+                            <h3>{{item.id}}</h3>
+                            <img :src="item.src">
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -39,11 +40,11 @@ export default {
             itemdescription: "ASDFDASDAS",
             userImg:"",
             item:[
-                {id:1,src:""},
-                {id:1,src:""},
-                {id:1,src:""},
-                {id:1,src:""},
-                {id:1,src:""},
+                {id:1,src:"http://localhost:3000/header/OIP.jpg"},
+                {id:1,src:"http://localhost:3000/header/OIP.jpg"},
+                {id:1,src:"http://localhost:3000/header/OIP.jpg"},
+                {id:1,src:"http://localhost:3000/header/OIP.jpg"},
+                {id:1,src:"http://localhost:3000/header/OIP.jpg"},
             ],
         }
     },

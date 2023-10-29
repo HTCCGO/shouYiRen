@@ -4,7 +4,7 @@
             <el-header><componentsHeaderVue/></el-header>  
             <el-container>
             <el-main><componentsResetUserVue/></el-main>
-        </el-container>
+          </el-container>
             <el-footer><componentsFooterVue/></el-footer>
         </el-container>
     </div>

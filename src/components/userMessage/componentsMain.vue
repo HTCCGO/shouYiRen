@@ -34,6 +34,8 @@ export default {
       userId: "123", // 对方的Id值
       socket: null,
       message: [],
+      time:null,
+      intervalId :null,
     }
   },
   mounted() {
@@ -48,13 +50,13 @@ export default {
         const fromData={
             userId:this.$$cookie.get('token'),
             userId_:this.userId,
-        }
+        };
+        this.intervalId = setInterval(this.shortPolling, 1000); // 每隔 1000 毫秒（1 秒）执行一次查询
         this.$http.post('/api/userMesssage/watchUserId',fromData).then(results=>{
            this. message=results.data.data;
         }).catch(err=>{
             console.log(err);
         })
-        console.log(this.userId);
       },
       deep: true,
       immediate: true,
@@ -97,11 +99,26 @@ export default {
       // 转移到支付界面
       this.$router.push('/pay');
     },
+    shortPolling(){
+      const fromData={
+            userId:this.$$cookie.get('token'),
+            userId_:this.userId,
+        };
+        this.intervalId = setInterval(this.shortPolling, 1000); // 每隔 1000 毫秒（1 秒）执行一次查询
+        this.$http.post('/api/userMesssage/watchUserId',fromData).then(results=>{
+           this. message=results.data.data;
+        }).catch(err=>{
+            console.log(err);
+        })
+    },
     getNewMessageMain() {
      this.createWebSocketConnection();
     },
    
   },
+  beforeDestroy() {
+ clearInterval(this.intervalId); // 在组件销毁时清除轮询
+}
 };
 
 </script>

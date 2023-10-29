@@ -1,24 +1,29 @@
 <template>
-    <div>
-        <el-container>
-            <el-header><componentsHeaderVue :is="header" /></el-header>
-            <el-container>
-            <el-main><componentsMainVue/></el-main>
-          </el-container>
-            <el-footer><componentsFooterVue/></el-footer>
-        </el-container>
-    </div>
+  <div>
+    <el-container>
+      <el-header> <component :is="headerComponent" /></el-header>
+      <el-container
+        ><el-main><componentsMainVue /></el-main>
+      </el-container>
+      <el-footer><componentsFooterVue /></el-footer>
+    </el-container>
+  </div>
 </template>
 
 <script>
-import componentsHeaderVue from '../components/componentsHeader.vue'
-import componentsMainVue from '../components/main/componentsMain.vue'
-import componentsFooterVue from '../components/componentsFooter.vue'
-import componentsHeaderVue_ from '../components/merchant/commponentsHeader.vue'
+import componentsHeaderVue from "../components/componentsHeader.vue";
+import componentsMainVue from "../components/main/componentsMain.vue";
+import componentsFooterVue from "../components/componentsFooter.vue";
+import componentsHeaderVue_ from "../components/merchant/commponentsHeader.vue";
 
 export default {
   data() {
-    return {}
+    return {
+      headerComponent: "",
+    };
+  },
+  mounted() {
+    this.header();
   },
   components: {
     componentsHeaderVue,
@@ -26,25 +31,25 @@ export default {
     componentsFooterVue,
     componentsHeaderVue_, // Fixed typo in the component name
   },
-  computed: {
+  methods: {
     header() {
-    const user=this.$store.state.user;
-    console.log(this.$store.state.user);
-     if(user){
-        return "componentsHeaderVue";
-     }else{
-        return "componentsHeaderVue_";
-     }
-    }
-  }
-}
+      const user = this.$store.state.user;
+
+      if (user) {
+        this.headerComponent = "componentsHeaderVue";
+      } else {
+        this.headerComponent = "componentsHeaderVue_";
+      }
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
-.el-header{
-    padding: 0;
+.el-header {
+  padding: 0;
 }
-.el-footer{
-    padding: 0;
+.el-footer {
+  padding: 0;
 }
 </style>

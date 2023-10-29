@@ -1,19 +1,44 @@
 <template>
-    <div>
-        <form action="https://openapi-sandbox.dl.alipaydev.com/gateway.do?method=alipay.trade.page.pay&app_id=9021000129610137&charset=utf-8&version=1.0&sign_type=RSA2&timestamp=2023-10-10%2003%3A10%3A19&notify_url=https%3A%2F%2Fwww.baidu.com&sign=cJlhN56jPwbLse833W9rwZauLfJPbZgTtnAEmJr8l%2BiD9UKrDjm086DHgdkVrCR9rjP9njO7HH6gnQlTNYP1Kpou9YKK4tOtdQI48xx9roez9RRpOHOUR6FynmnfFkrJCXruBSba5unraDjNi%2B2wEhS%2FUZ%2FPwY1GsP7o0oSwT8Oe7P651APB0kgZRwO%2FZPPE5hboUXOoZd41l8LsXDGuys%2FUycLEz%2BMDiJiEI7Y8Yr2LKVoiaH0ghUaCsI0nKYDkgNq5%2FVnkWWuoXmJegTEFUeyQxo1O8Jt%2FGfvFC2ynhDA8oGx5VFxr1tlq2m19e7NlBvAKLMLTJWRIxH%2F45qzBtQ%3D%3D" method="post" 
-name="alipaySDKSubmit1696878619545" id="alipaySDKSubmit1696878619545">
-      </form>
-    </div>
+  <div>
+    <el-carousel :interval="5000" arrow="always">
+    <el-carousel-item v-for="item in headerData" :key="item">
+        <img :src="item.src" alt="">
+      <h3>{{ item.src }}</h3>
+    </el-carousel-item>
+  </el-carousel>
+  </div>
 </template>
 
 <script>
 export default {
     data(){
-
+        return {
+              headerData:[
+                {id:1,src:'http://localhost:3000/header/OIP.jpg'},
+                {id:2,src:'http://localhost:3000/header/OIP.jpg'},
+                {id:3,src:'http://localhost:3000/header/OIP.jpg'},
+                {id:4,src:'http://localhost:3000/header/OIP.jpg'},
+                {id:5,src:'http://localhost:3000/header/OIP.jpg'},
+        ],
+        }
     },
 }
 </script>
 
 <style>
-
+ .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+  }
+  
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
 </style>

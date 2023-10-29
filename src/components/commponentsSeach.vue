@@ -1,12 +1,13 @@
 <template>
     <div class="MainIndex">
-        <el-row>
+        <div v-if="seach">
+   <el-row style="height: 69vh;">
             <el-col :span="6" v-for="item in cardData" :key="item.id">
                 <el-card :body-style="{ padding: '5px' }" shadow="always">
                     <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
                         class="image">
                     <div style="padding: 14px;">
-                        <span>{{ item.title }}</span>
+                        <span>{{ item.cardTitle }}</span>
                         <div class="bottom clearfix">
                             <el-button type="primary" class="buttom" size="mini" @click="getItem(item)">立即进入</el-button>
                         </div>
@@ -17,12 +18,22 @@
         <div class="block">
             <el-pagination
              hide-on-single-page
-            :current-page="pageNo" :page-sizes="[5, 10, 30, 50]" 
+            :current-page="pageNo" 
+            :page-sizes="[5, 10, 30, 50]" 
             :page-size="pagesize"
             layout="prev, pager, next" 
-            :total="totalCount">
+            :total="totalCount"
+            @current-change="handleCurrentChange">
             </el-pagination>
         </div>
+        </div>
+
+        <div v-else>
+            <div class="Main">
+                <span class="Main_span">未找到对应的数据</span>
+            </div>
+        </div>
+     
 
     </div>
 </template>
@@ -42,49 +53,56 @@ export default {
                 { id: 8, title: 'Card 3', content: 'Content 3', src: '', text: ' 11' },
                 // 添加更多的卡片数据...
             ],
-            userList: [],
             pageNo: 1,//默认当前页面为第一页
-            pagesize: 4,//默认当前每页的数据为4条
-            totalCount: 100//默认总数为0
+            pagesize: 8,//默认当前每页的数据为4条
+            totalCount: 0,//默认总数为0
+            pageNumber:1,
+            seach:false,
         }
     },
     mounted() {//这部分的函数是在页面的加载之前进行执行的函数
         this.getCount();//获取当前数据的总数
-        this.getList();//依照当前的页号和每页的数据量进行查询
         this.getSeach();//发送查询信息
     },
-
-    watch:{
-        pageNo:{
-            handler(){
-                let fromData={
-                    pageNo:this.pageNo,
-                }
-                this.$http.post('/api/seach/page',fromData).then(function(response){
-                    this.cardData=response.data;
-                })
-            }
-        }
-    },
     methods: {
+        handleCurrentChange(pageNumber){
+            this.pageNumber=pageNumber;
+            this.getSeach(pageNumber);
+        },
         getCount() {
-            this.$http.post('/api/seach/getCount').then(res => {
-                this.totalCount = res.data;
+            this.$http.post('/api/seach/getCount',{ seach_txt:this.$store.state.seach_txt,}).then(res => {
+                this.totalCount = res.data.data;
             })
         },
-        getList() {
-            let fromData = new FormData();//一个web Api用于创建和处理包含表单数据的对象。它提供了一种方便的方式来捕获表单中的用户输入，并以键值对的形式进行处理
-            fromData.append("pageNo", this.pageNo);
-            fromData.append("pagesize", this.pagesize);
+        getList(pageNumber) {
+           const fromData = {
+                pageNo: pageNumber,
+                pageSize: this.pagesize,
+                seach_txt:this.$store.state.seach_txt,
+        }
             //将页面完成数据修改后的两个参数改变为键值对的形式，并存储在fromdata中
 
             this.$http.post("/api/seach/page", fromData).then(res => {
-                this.userList = res.data;
-            })
+                if( res.data.data){
+                this.cardData = res.data.data;
+                this.seach=true;
+                }
+            });
         },
         getSeach(){
-            this.$http.post('/api/seach',this.$store.state.seach_txt).then(res =>{
-                this.cardData=res.data.data;
+            const fromData={
+                pageNo:this.pageNumber,
+                pageSize:this.pagesize,
+                seach_txt:this.$store.state.seach_txt,
+            }
+            this.$http.post('/api/seach',fromData).then(res =>{
+                console.log(res);
+                if( res.data.data.length !== 0){
+                this.cardData = res.data.data;
+                this.seach=true;
+                }else{
+                    this.seach=false;
+                }
             }).catch(err=>{
                 console.log(err.message);
             });
@@ -102,10 +120,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.Main{
+    height: 72.6vh;
+}
+.Main_span{
+    display: inline-block;
+    margin-left: 40%;
+    margin-top: 30%;
+     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;;
+    font-size: 15px;
+    color: #999;
+    }
 .MainIndex {
     width: 800px;
     margin: auto;
     margin-top: 20px;
+    height: 72.6vh;
 }
 
 .el-pagination {

@@ -9,7 +9,7 @@
                 <el-input type="password" v-model="ruleForm.npsd" autocomplete="off" ></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm(formName)" class="ti_jiao">提交</el-button>
+                <el-button type="primary" @click="submitForm()" class="ti_jiao">提交</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -26,7 +26,7 @@ export default {
                     callback(new Error('密码的长度为8'));
                 } else {
                     //验证密码是否为原密码
-                    this.$http.post('/login/validatePassword', { phoneNumber: this.$store.state.phoneNumber,password:this.$md5(this.ruleForm.psd) }).then(res => {
+                    this.$http.post('/api/login/validatePassword', { phoneNumber: this.$store.state.phoneNumber,password:this.$md5(this.ruleForm.psd) }).then(res => {
                         if(res.data.data){
                             callback(new Error('新密码不能与原密码相同'));
                         }else{
@@ -66,15 +66,15 @@ export default {
         submitForm() {
                     const fromData = {
                         phoneNumber: this.$store.state.phoneNumber,//在vuex中得到phoneNumber的值
-                        newPassword: this.ruleForm.psd,//新的密码
+                        newPassword: this.$md5(this.ruleForm.psd),//新的密码
                     }
-                    this.$http.post('/api/forgetPassword_', fromData).then( (response)=> {
+                    this.$http.post('/api/login/forgetPassword_', fromData).then( (response)=> {
                         //依照code的值来说明是否完成了数据的更改
-                        if (response.data.data === 10000) {
+                        if (response.data.data) {
                             //转移到登录的路由之中
                             this.$router.push('/login');
                         } else {
-                            console.log(response.data.message);
+                            console.log(response.data.data);
                         }
                     }).catch( (error)=> {
                         console.log(error);
@@ -115,6 +115,12 @@ h3{
         position: relative;
         top: -20px;
         left: 155px;
+}
+
+.el-form{
+    padding-bottom: 0px;
+    padding-left: 15px;
+    padding-top: 7px;
 }
 </style>
 
